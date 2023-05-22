@@ -1,4 +1,4 @@
-class Dueño {
+class Usuario {
 
     id;
     nombre;
@@ -8,5 +8,6 @@ class Dueño {
     codigoEmpresa;
     fkRol;
     fkEmpresa;
+    cuit;
 }
-export default Dueño;
+export default Usuario;
