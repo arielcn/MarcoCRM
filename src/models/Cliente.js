@@ -1,8 +1,8 @@
-class Clientes{
+class Cliente{
     id;
     nombre;
     apellido;
     mail;
     fkUsuario;
 }
-export default Clientes;
+export default Cliente;

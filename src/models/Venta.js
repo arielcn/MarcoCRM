@@ -1,7 +1,7 @@
-class Ventas{
+class Venta{
     idVenta;
     fkUsuario;
     fkEstado;
     fkCliente;
 }
-export default Ventas;
+export default Venta;

@@ -1,0 +1,96 @@
+import config from '../../dbconfig.js';
+import sql, { MAX } from 'mssql';
+
+export class reunionServices {
+
+    static insertReunion = async (reunion) => {
+        let returnEntity = null;
+        console.log(reunion);
+        const { Id, Titulo, Formato, FechaYHora, Color, CodigoEmpresa, Imagen } = reunion;
+        let pool = await sql.connect(config);
+
+        try {
+            const request = new sql.Request(pool);
+
+            returnEntity = request
+                .input('Titulo', sql.NVarChar(50), Titulo)
+                .input('Formato', sql.Int, Formato)
+                .input('FechaYHora', sql.Date, FechaYHora)
+                .input('Color', sql.NVarChar(50), Color)
+                .input('CodigoEmpresa', sql.Int, CodigoEmpresa)
+                .input('Imagen', sql.NVarChar(MAX), Imagen)
+                .query('INSERT INTO Reuniones (Titulo, Formato, FechaYHora, Color, CodigoEmpresa, Imagen) VALUES (@Titulo, @Formato, @FechaYHora, @Color, @CodigoEmpresa, @Imagen)')
+        } catch (error) {
+            console.log(error);
+        }
+        return returnEntity;
+    }
+
+    /*static getAllReuniones = async() => {
+        let returnEntity = null;
+        try{
+            let pool = await sql.connect(config);
+            let result = await pool.request()
+                .query('SELECT * FROM Reuniones WHERE no se que va acá ');
+            returnEntity = result.recordsets[0];
+        }catch (error){
+            console.log(error);
+        }
+        return returnEntity;
+    }*/
+
+    static getReunionById = async (id) => {
+        let returnEntity = null;
+        try {
+            let pool = await sql.connect(config);
+            let result = await pool.request()
+                .input('pId', sql.Int, id)
+                .query('SELECT * FROM Reuniones WHERE id = @pId');
+            returnEntity = result.recordsets[0][0];
+        } catch (error) {
+            console.log(error);
+        }
+        return returnEntity;
+    }
+
+    static updateReunion = async (Reunion) => {
+        let returnEntity = null;
+        const { Id, Titulo, Formato, FechaYHora, Color, CodigoEmpresa, Imagen } = Reunion;
+        try {
+            const request = new sql.Request(pool);
+
+            returnEntity = request
+                .input('Titulo', sql.NVarChar(50), Titulo)
+                .input('Formato', sql.Int, Formato)
+                .input('FechaYHora', sql.Date, FechaYHora)
+                .input('Color', sql.NVarChar(50), Color)
+                .input('CodigoEmpresa', sql.Int, CodigoEmpresa)
+                .input('Imagen', sql.NVarChar(MAX), Imagen)
+                .query('UPDATE Reuniones SET Titulo = @Titulo, Formato = @Formato, FechaYHora = @FechaYHora, Color = @Color, CodigoEmpresa = @CodigoEmpresa, Imagen = @Imagen WHERE Id = @Id');
+        } catch (error) {
+            console.log(error);
+        }
+        return returnEntity;
+    }
+
+    static deleteReunion = async (id) => {
+        let returnEntity = null;
+        try {
+            const request = new sql.Request(pool);
+            returnEntity = request
+                .input('Id', sql.Int, id)
+                .query('DELETE from Reuniones WHERE Id = @Id ');
+        } catch (error) {
+            console.log(error);
+        }
+        return returnEntity;
+    }
+
+
+
+
+
+
+
+
+}

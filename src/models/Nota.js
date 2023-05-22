@@ -1,6 +1,6 @@
-class Notas{
+class Nota{
     id;
     nota;
     fkReunion;
 }
-export default Notas;
+export default Nota;

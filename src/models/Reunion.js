@@ -1,4 +1,4 @@
-class Reuniones{
+class Reunion{
     id;
     titulo;
     formato;
@@ -7,4 +7,4 @@ class Reuniones{
     codigoEmpresa;
     imagen;
 }
-export default Reuniones;
+export default Reunion;
