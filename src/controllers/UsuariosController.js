@@ -23,7 +23,7 @@ router.put('', async(req, res) => {
 });
 
 router.get('/:id', async(req, res) => {
-    const r = await usuarioServices.getUsuarioById(req.params.id)
+    const usuario = await usuarioServices.getUsuarioById(req.params.id)
     console.log(res);
-    return res.status(200).json(r);
+    return res.status(200).json(usuario);
 });

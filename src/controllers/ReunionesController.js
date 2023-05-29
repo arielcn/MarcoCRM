@@ -23,9 +23,9 @@ router.put('', async(req, res) => {
 });
 
 router.get('/:id', async(req, res) => {
-    const r = await reunionServices.getReunionById(req.params.id)
+    const reunion = await reunionServices.getReunionById(req.params.id)
     console.log(res);
-    return res.status(200).json(r);
+    return res.status(200).json(reunion);
 });
 
 router.delete('/:id', async(req, res) => {

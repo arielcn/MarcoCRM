@@ -1,19 +1,19 @@
 import config from '../../dbconfig.js';
 import sql from 'mssql';
 
-export class notaServices {
+export default class notaServices {
 
     static insertNota = async (nota) => {
         let returnEntity = null;
         console.log(character);
-        const { Id, Nota, fkReunion } = nota;
+        const { Id, Notas, fkReunion } = nota;
         let pool = await sql.connect(config);
 
         try {
             const request = new sql.Request(pool);
 
             returnEntity = request
-                .input('Nota', sql.NVarChar(MAX), Nota)
+                .input('Notas', sql.NVarChar(9999), Notas)
                 .query('INSERT INTO Notas (Notas) VALUES (@Notas)')
         } catch (error) {
             console.log(error);
@@ -50,12 +50,12 @@ export class notaServices {
 
     static updateNota = async (Nota) => {
         let returnEntity = null;
-        const { Id, Nota, fkReunion } = Nota;
+        const { Id, Notas, fkReunion } = Nota;
         try {
             const request = new sql.Request(pool);
 
             returnEntity = request
-                .input('Nota', sql.NVarChar(MAX), Nota)
+                .input('Notas', sql.NVarChar(9999), Notas)
                 .query('UPDATE Notas SET Nota = @Nota WHERE Id = @Id');
         } catch (error) {
             console.log(error);

@@ -1,7 +1,8 @@
 import config from '../../dbconfig.js';
 import sql from 'mssql';
 
-export class usuarioServices {
+
+export default class usuarioServices {
 
     static insertUsuario = async (Usuario) => {
         let returnEntity = null;
@@ -17,7 +18,7 @@ export class usuarioServices {
                 .input('Apellido', sql.NVarChar(50), Apellido)
                 .input('Contraseña', sql.NVarChar(50), Contraseña)
                 .input('Mail', sql.NVarChar(50), Mail)
-                .input('CodigoEmpresa', sql.NVarChar(MAX), CodigoEmpresa)
+                .input('CodigoEmpresa', sql.NVarChar(9999), CodigoEmpresa)
                 .input('Cuit', sql.NVarChar(50), Cuit)
                 .query('INSERT INTO Usuarios (Nombre, Apellido, Contraseña, Mail, CodigoEmpresa, Cuit) VALUES (@Nombre, @Apellido, @Contraseña, @Mail, @CodigoEmpresa, @Cuit)')
         } catch (error) {
@@ -37,7 +38,7 @@ export class usuarioServices {
                 .input('Apellido', sql.NVarChar(50), Apellido)
                 .input('Contraseña', sql.NVarChar(50), Contraseña)
                 .input('Mail', sql.NVarChar(50), Mail)
-                .input('CodigoEmpresa', sql.NVarChar(MAX), CodigoEmpresa)
+                .input('CodigoEmpresa', sql.NVarChar(9999), CodigoEmpresa)
                 .input('Cuit', sql.NVarChar(50), Cuit)
                 .query('UPDATE Usuarios SET Nombre = @Nombre, Apellido = @Apellido, Contraseña = @Contraseña, Mail = @Mail, CodigoEmpresa = @CodigoEmpresa, Cuit = @Cuit WHERE Id = @Id');
         } catch (error) {
@@ -60,8 +61,4 @@ export class usuarioServices {
         }
         return returnEntity;
     }
-
-
-
-
 }

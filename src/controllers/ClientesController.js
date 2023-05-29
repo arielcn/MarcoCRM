@@ -23,9 +23,9 @@ router.put('', async(req, res) => {
 });
 
 router.get('/:id', async(req, res) => {
-    const r = await clienteServices.getClienteById(req.params.id)
+    const clientes = await clienteServices.getClienteById(req.params.id)
     console.log(res);
-    return res.status(200).json(r);
+    return res.status(200).json(clientes);
 });
 
 router.delete('/:id', async(req, res) => {

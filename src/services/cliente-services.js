@@ -1,7 +1,7 @@
 import config from '../../dbconfig.js';
 import sql from 'mssql';
 
-export class clienteServices {
+export default class clienteServices {
     
     static getAllClientes = async() => {
         let returnEntity = null;

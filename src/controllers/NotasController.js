@@ -23,9 +23,9 @@ router.put('', async(req, res) => {
 });
 
 router.get('/:id', async(req, res) => {
-    const r = await notasServices.getNotaById(req.params.id)
+    const notas = await notasServices.getNotaById(req.params.id)
     console.log(res);
-    return res.status(200).json(r);
+    return res.status(200).json(notas);
 });
 
 router.delete('/:id', async(req, res) => {
