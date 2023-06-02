@@ -1,8 +1,8 @@
 import { Router } from 'express';
-import reunionServices from '../services/reunion-services'
-const router = Router();
+import reunionServices from '../services/reunion-services.js'
+const reunionRouter = Router();
 
-router.post('', async(req, res) => {
+reunionRouter.post('', async(req, res) => {
     try {
         await reunionServices.insertReunion(req.body)
         res.status(200).json({message: 'meeting inserted'});
@@ -12,7 +12,7 @@ router.post('', async(req, res) => {
     }
 });
 
-router.put('', async(req, res) => {
+reunionRouter.put('', async(req, res) => {
     try {
         await reunionServices.updateReunion(req.body)
         res.status(200).json({message: 'meeting updated'});
@@ -22,13 +22,13 @@ router.put('', async(req, res) => {
     }
 });
 
-router.get('/:id', async(req, res) => {
+reunionRouter.get('/:id', async(req, res) => {
     const reunion = await reunionServices.getReunionById(req.params.id)
     console.log(res);
     return res.status(200).json(reunion);
 });
 
-router.delete('/:id', async(req, res) => {
+reunionRouter.delete('/:id', async(req, res) => {
     try {
         await notasServices.deleteReunion(req.params.id)
         res.status(200).json({message: 'meeting deleted'});
@@ -38,8 +38,10 @@ router.delete('/:id', async(req, res) => {
     }
 });
 
-router.get('', async(req, res) => {
+reunionRouter.get('', async(req, res) => {
     const reuniones = await reunionServices.getAllReuniones();
     console.log(res);
     return res.status(200).json(reuniones);
 });
+
+export default reunionRouter;

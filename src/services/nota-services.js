@@ -14,6 +14,8 @@ export default class notaServices {
 
             returnEntity = request
                 .input('Notas', sql.NVarChar(9999), Notas)
+                .input('fkReunion', slq.Int, fkReunion)
+                .input('Id', sql.Int, Id)
                 .query('INSERT INTO Notas (Notas) VALUES (@Notas)')
         } catch (error) {
             console.log(error);
@@ -40,7 +42,7 @@ export default class notaServices {
             let pool = await sql.connect(config);
             let result = await pool.request()
                 .input('pId', sql.Int, id)
-                .query('SELECT * FROM Notas WHERE id = @pId');
+                .query('SELECT * FROM Notas WHERE Id = @pId');
             returnEntity = result.recordsets[0][0];
         } catch (error) {
             console.log(error);
@@ -50,12 +52,15 @@ export default class notaServices {
 
     static updateNota = async (Nota) => {
         let returnEntity = null;
+        let pool = await sql.connect(config);
         const { Id, Notas, fkReunion } = Nota;
         try {
             const request = new sql.Request(pool);
 
             returnEntity = request
                 .input('Notas', sql.NVarChar(9999), Notas)
+                .input('Id', sql.Int, Id)
+                .input('fkReunion', slq.Int, fkReunion)
                 .query('UPDATE Notas SET Nota = @Nota WHERE Id = @Id');
         } catch (error) {
             console.log(error);
@@ -65,6 +70,7 @@ export default class notaServices {
 
     static deleteNota = async (id) => {
         let returnEntity = null;
+        let pool = await sql.connect(config);
         try {
             const request = new sql.Request(pool);
             returnEntity = request

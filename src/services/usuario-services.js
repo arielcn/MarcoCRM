@@ -7,20 +7,22 @@ export default class usuarioServices {
     static insertUsuario = async (Usuario) => {
         let returnEntity = null;
         console.log(Usuario);
-        const { Id, Nombre, Apellido, Contraseña, Mail, CodigoEmpresa, fkRol, fkEmpresa, Cuit } = Usuario;
+        const { Nombre, Apellido, Contraseña, Mail, CodigoEmpresa, fkRol, fkEmpresa, Cuit } = Usuario;
         let pool = await sql.connect(config);
 
         try {
             const request = new sql.Request(pool);
 
             returnEntity = request
-                .input('Nombre', sql.NVarChar(50), Nombre)
-                .input('Apellido', sql.NVarChar(50), Apellido)
-                .input('Contraseña', sql.NVarChar(50), Contraseña)
-                .input('Mail', sql.NVarChar(50), Mail)
-                .input('CodigoEmpresa', sql.NVarChar(9999), CodigoEmpresa)
+                .input('Nombre', sql.NVarChar(150), Nombre)
+                .input('Apellido', sql.NVarChar(150), Apellido)
+                .input('Contraseña', sql.NVarChar(150), Contraseña)
+                .input('Mail', sql.NVarChar(150), Mail)
+                .input('CodigoEmpresa', sql.Int, CodigoEmpresa)
                 .input('Cuit', sql.NVarChar(50), Cuit)
-                .query('INSERT INTO Usuarios (Nombre, Apellido, Contraseña, Mail, CodigoEmpresa, Cuit) VALUES (@Nombre, @Apellido, @Contraseña, @Mail, @CodigoEmpresa, @Cuit)')
+                .input('fkRol', sql.Int, fkRol)
+                .input('fkEmpresa', sql.Int, fkEmpresa)
+                .query('INSERT INTO Usuarios (Nombre, Apellido, Contraseña, Mail, CodigoEmpresa, Cuit, fkRol, fkEmpresa) VALUES (@Nombre, @Apellido, @Contraseña, @Mail, @CodigoEmpresa, @Cuit, @fkRol, @fkEmpresa)')
         } catch (error) {
             console.log(error);
         }
@@ -29,17 +31,22 @@ export default class usuarioServices {
 
     static updateUsuario = async (Usuario) => {
         let returnEntity = null;
+        let pool = await sql.connect(config);
+        console.log(Usuario);
         const { Id, Nombre, Apellido, Contraseña, Mail, CodigoEmpresa, fkRol, fkEmpresa, Cuit } = Usuario;
         try {
             const request = new sql.Request(pool);
 
             returnEntity = request
-                .input('Nombre', sql.NVarChar(50), Nombre)
-                .input('Apellido', sql.NVarChar(50), Apellido)
-                .input('Contraseña', sql.NVarChar(50), Contraseña)
-                .input('Mail', sql.NVarChar(50), Mail)
-                .input('CodigoEmpresa', sql.NVarChar(9999), CodigoEmpresa)
+                .input('Id', sql.Int, Id)
+                .input('Nombre', sql.NVarChar(150), Nombre)
+                .input('Apellido', sql.NVarChar(150), Apellido)
+                .input('Contraseña', sql.NVarChar(150), Contraseña)
+                .input('Mail', sql.NVarChar(150), Mail)
+                .input('CodigoEmpresa', sql.Int, CodigoEmpresa)
                 .input('Cuit', sql.NVarChar(50), Cuit)
+                .input('fkRol', sql.Int, fkRol)
+                .input('fkEmpresa', sql.Int, fkEmpresa)
                 .query('UPDATE Usuarios SET Nombre = @Nombre, Apellido = @Apellido, Contraseña = @Contraseña, Mail = @Mail, CodigoEmpresa = @CodigoEmpresa, Cuit = @Cuit WHERE Id = @Id');
         } catch (error) {
             console.log(error);
@@ -52,11 +59,41 @@ export default class usuarioServices {
         try{
             let pool = await sql.connect(config);
             let result = await pool.request()
-                .input('pNombre', sql.NVarChar(50), Nombre)
-                .input('pContraseña', sql.NVarChar(50), Contraseña)
-                .query('SELECT * FROM Usuarios WHERE Nombre = @pNombre AND Contraseña = @pContraseña');
+                .input('pId', sql.Int, id)
+                .query('SELECT * FROM Usuarios WHERE Id = @pId');
+            console.log(result);
             returnEntity = result.recordsets[0][0];
         }catch (error){
+            console.log(error);
+        }
+        return returnEntity;
+    }
+    static getUsuarioByNombreYContra= async (Nombre, Contraseña) => {
+        let returnEntity = null;
+        try{
+            let pool = await sql.connect(config);
+            let result = await pool.request()
+                .input('Nombre', sql.VarChar(150), Nombre)
+                .input('Contraseña', sql.VarChar(150), Contraseña)
+                .query('SELECT * FROM Usuarios WHERE Nombre = @Nombre AND Contraseña = @Contraseña');
+            console.log(result);
+            returnEntity = result.recordsets[0][0];
+        }catch (error){
+            console.log(error);
+        }
+        return returnEntity;
+    }
+
+    static deleteUsuario = async(id) => {
+        let returnEntity = null;
+        let pool = await sql.connect(config);
+        try{
+            const result = await pool.request()
+                .input('Id', sql.Int, id)
+                .query('DELETE from Usuarios WHERE Id = @Id ');
+                console.log(result);
+                returnEntity = result.rowsAffected;
+        }catch (error) {
             console.log(error);
         }
         return returnEntity;

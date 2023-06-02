@@ -1,8 +1,8 @@
 import { Router } from 'express';
-import notasServices from '../services/nota-services'
-const router = Router();
+import notasServices from '../services/nota-services.js'
+const routerNotas = Router();
 
-router.post('', async(req, res) => {
+routerNotas.post('', async(req, res) => {
     try {
         await notasServices.insertNota(req.body)
         res.status(200).json({message: 'note inserted'});
@@ -12,7 +12,7 @@ router.post('', async(req, res) => {
     }
 });
 
-router.put('', async(req, res) => {
+routerNotas.put('', async(req, res) => {
     try {
         await notasServices.updateNota(req.body)
         res.status(200).json({message: 'note updated'});
@@ -22,13 +22,13 @@ router.put('', async(req, res) => {
     }
 });
 
-router.get('/:id', async(req, res) => {
+routerNotas.get('/:id', async(req, res) => {
     const notas = await notasServices.getNotaById(req.params.id)
     console.log(res);
     return res.status(200).json(notas);
 });
 
-router.delete('/:id', async(req, res) => {
+routerNotas.delete('/:id', async(req, res) => {
     try {
         await notasServices.deleteNota(req.params.id)
         res.status(200).json({message: 'note deleted'});
@@ -38,8 +38,10 @@ router.delete('/:id', async(req, res) => {
     }
 });
 
-router.get('', async(req, res) => {
+routerNotas.get('', async(req, res) => {
     const notas = await notasServices.getAllNotas();
     console.log(res);
     return res.status(200).json(notas);
 });
+
+export default routerNotas;

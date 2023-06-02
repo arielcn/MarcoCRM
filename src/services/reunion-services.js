@@ -13,6 +13,7 @@ export default class reunionServices {
             const request = new sql.Request(pool);
 
             returnEntity = request
+                .input('Id', sql.Int, Id)
                 .input('Titulo', sql.NVarChar(50), Titulo)
                 .input('Formato', sql.Int, Formato)
                 .input('FechaYHora', sql.Date, FechaYHora)
@@ -60,6 +61,7 @@ export default class reunionServices {
             const request = new sql.Request(pool);
 
             returnEntity = request
+                .input('Id', sql.Int, Id)
                 .input('Titulo', sql.NVarChar(50), Titulo)
                 .input('Formato', sql.Int, Formato)
                 .input('FechaYHora', sql.Date, FechaYHora)
