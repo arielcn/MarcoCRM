@@ -1,5 +1,4 @@
 class Usuario {
-
     id;
     nombre;
     apellido;

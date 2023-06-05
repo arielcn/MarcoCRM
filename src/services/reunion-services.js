@@ -6,7 +6,7 @@ export default class reunionServices {
     static insertReunion = async (reunion) => {
         let returnEntity = null;
         console.log(reunion);
-        const { Id, Titulo, Formato, FechaYHora, Color, CodigoEmpresa, Imagen } = reunion;
+        const { id, titulo, formato, fechaYHora, color, codigoEmpresa, imagen } = reunion;
         let pool = await sql.connect(config);
 
         try {
@@ -56,7 +56,7 @@ export default class reunionServices {
 
     static updateReunion = async (Reunion) => {
         let returnEntity = null;
-        const { Id, Titulo, Formato, FechaYHora, Color, CodigoEmpresa, Imagen } = Reunion;
+        const { id, titulo, formato, fechaYHora, color, codigoEmpresa, imagen } = Reunion;
         try {
             const request = new sql.Request(pool);
 
@@ -87,12 +87,5 @@ export default class reunionServices {
         }
         return returnEntity;
     }
-
-
-
-
-
-
-
 
 }

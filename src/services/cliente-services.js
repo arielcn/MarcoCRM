@@ -19,7 +19,7 @@ export default class clienteServices {
     static insertCliente = async(cliente) => {
         let returnEntity = null;
         console.log(character);
-        const {Id, Nombre, Apellido, Mail, fkUsuario} = cliente;
+        const {id, nombre, apellido, mail, fkUsuario} = cliente;
         let pool = await sql.connect(config);
 
         try{
@@ -55,7 +55,7 @@ export default class clienteServices {
     static updateCliente = async (Cliente) => {
         let returnEntity = null;
         let pool = await sql.connect(config);
-        const { Id, Nombre, Apellido, Mail, fkUsuario } = Cliente;
+        const { id, nombre, apellido, mail, fkUsuario } = Cliente;
         try {
             const request = new sql.Request(pool);
 

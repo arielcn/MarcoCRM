@@ -7,19 +7,18 @@ export default class usuarioServices {
     static insertUsuario = async (Usuario) => {
         let returnEntity = null;
         console.log(Usuario);
-        const { Nombre, Apellido, Contraseña, Mail, CodigoEmpresa, fkRol, fkEmpresa, Cuit } = Usuario;
+        const { nombre, apellido, contraseña, mail, codigoEmpresa, fkRol, fkEmpresa, cuit } = Usuario;
         let pool = await sql.connect(config);
-
         try {
             const request = new sql.Request(pool);
 
             returnEntity = request
-                .input('Nombre', sql.NVarChar(150), Nombre)
-                .input('Apellido', sql.NVarChar(150), Apellido)
-                .input('Contraseña', sql.NVarChar(150), Contraseña)
-                .input('Mail', sql.NVarChar(150), Mail)
-                .input('CodigoEmpresa', sql.Int, CodigoEmpresa)
-                .input('Cuit', sql.NVarChar(50), Cuit)
+                .input('Nombre', sql.NVarChar(150), nombre)
+                .input('Apellido', sql.NVarChar(150), apellido)
+                .input('Contraseña', sql.NVarChar(150), contraseña)
+                .input('Mail', sql.NVarChar(150), mail)
+                .input('CodigoEmpresa', sql.Int, codigoEmpresa)
+                .input('Cuit', sql.NVarChar(50), cuit)
                 .input('fkRol', sql.Int, fkRol)
                 .input('fkEmpresa', sql.Int, fkEmpresa)
                 .query('INSERT INTO Usuarios (Nombre, Apellido, Contraseña, Mail, CodigoEmpresa, Cuit, fkRol, fkEmpresa) VALUES (@Nombre, @Apellido, @Contraseña, @Mail, @CodigoEmpresa, @Cuit, @fkRol, @fkEmpresa)')
@@ -33,7 +32,7 @@ export default class usuarioServices {
         let returnEntity = null;
         let pool = await sql.connect(config);
         console.log(Usuario);
-        const { Id, Nombre, Apellido, Contraseña, Mail, CodigoEmpresa, fkRol, fkEmpresa, Cuit } = Usuario;
+        const { id, nombre, apellido, contraseña, mail, codigoEmpresa, fkRol, fkEmpresa, cuit } = Usuario;
         try {
             const request = new sql.Request(pool);
 

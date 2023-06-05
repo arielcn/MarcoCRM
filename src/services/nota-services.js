@@ -6,7 +6,7 @@ export default class notaServices {
     static insertNota = async (nota) => {
         let returnEntity = null;
         console.log(character);
-        const { Id, Notas, fkReunion } = nota;
+        const { id, notas, fkReunion } = nota;
         let pool = await sql.connect(config);
 
         try {
@@ -53,7 +53,7 @@ export default class notaServices {
     static updateNota = async (Nota) => {
         let returnEntity = null;
         let pool = await sql.connect(config);
-        const { Id, Notas, fkReunion } = Nota;
+        const { id, notas, fkReunion } = Nota;
         try {
             const request = new sql.Request(pool);
 
