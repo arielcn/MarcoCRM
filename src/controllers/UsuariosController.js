@@ -4,7 +4,7 @@ const usuarioRouter = Router();
 
 usuarioRouter.post('', async(req, res) => {
     try {
-        await usuarioServices.insertUsuario(req.body)
+        await usuarioServices.insertUsuario(req.body.usuario)
         res.status(200).json({message: 'user inserted'});
     } catch (error) {
         console.error(error);
