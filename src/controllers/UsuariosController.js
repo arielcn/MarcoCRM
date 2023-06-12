@@ -28,7 +28,7 @@ usuarioRouter.get('/getById/:id', async(req, res) => {
 });
 
 usuarioRouter.get('/login', async(req, res) => {
-    const usuario = await usuarioServices.getUsuarioByNombreYContra(req.body.usuario.nombre, req.body.usuario.pass)
+    const usuario = await usuarioServices.getUsuarioByMailYContra(req.body.usuario.mail, req.body.usuario.pass)
     return res.status(200).json(usuario);
 });
 

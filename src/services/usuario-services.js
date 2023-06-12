@@ -67,14 +67,14 @@ export default class usuarioServices {
         }
         return returnEntity;
     }
-    static getUsuarioByNombreYContra= async (Nombre, Contraseña) => {
+    static getUsuarioByMailYContra= async (Mail, Contraseña) => {
         let returnEntity = null;
         try{
             let pool = await sql.connect(config);
             let result = await pool.request()
-                .input('Nombre', sql.VarChar(150), Nombre)
+                .input('Mail', sql.VarChar(150), Mail)
                 .input('Contraseña', sql.VarChar(150), Contraseña)
-                .query('SELECT * FROM Usuarios WHERE Nombre = @Nombre AND Contraseña = @Contraseña');
+                .query('SELECT * FROM Usuarios WHERE Mail = @Mail AND Contraseña = @Contraseña');
             console.log(result);
             returnEntity = result.recordsets[0][0];
         }catch (error){
