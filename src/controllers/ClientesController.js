@@ -4,7 +4,7 @@ const routerClientes = Router();
 
 routerClientes.post('', async(req, res) => {
     try {
-        await clienteServices.insertCliente(req.body)
+        await clienteServices.insertCliente(req.body.cliente)
         res.status(200).json({message: 'client inserted'});
     } catch (error) {
         console.error(error);

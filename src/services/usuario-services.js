@@ -4,21 +4,33 @@ import sql from 'mssql';
 
 export default class usuarioServices {
 
+    static checkExistingUser = async (Mail) => {
+        let pool = await sql.connect(config);
+        let result = await pool.request()
+            .input('Mail', sql.VarChar(150), Mail)
+            .query('SELECT COUNT(*) as count FROM Usuarios WHERE Mail = @Mail');
+        // Comprueba si el correo electrónico existe
+        if (result.recordset[0].count > 0) {
+            return true; // El correo electrónico ya existe
+        } else {
+            return false; // El correo electrónico no existe
+        }
+    }
     static insertUsuario = async (Usuario) => {
         let returnEntity = null;
         console.log(Usuario);
-        const { nombre, apellido, contraseña, mail, codigoEmpresa, fkRol, fkEmpresa, cuit } = Usuario;
+        const { Nombre, Apellido, Contraseña, Mail, CodigoEmpresa, fkRol, fkEmpresa, Cuit } = Usuario;
         let pool = await sql.connect(config);
         try {
             const request = new sql.Request(pool);
 
             returnEntity = request
-                .input('Nombre', sql.NVarChar(150), nombre)
-                .input('Apellido', sql.NVarChar(150), apellido)
-                .input('Contraseña', sql.NVarChar(150), contraseña)
-                .input('Mail', sql.NVarChar(150), mail)
-                .input('CodigoEmpresa', sql.Int, codigoEmpresa)
-                .input('Cuit', sql.NVarChar(50), cuit)
+                .input('Nombre', sql.NVarChar(150), Nombre)
+                .input('Apellido', sql.NVarChar(150), Apellido)
+                .input('Contraseña', sql.NVarChar(150), Contraseña)
+                .input('Mail', sql.NVarChar(150), Mail)
+                .input('CodigoEmpresa', sql.Int, CodigoEmpresa)
+                .input('Cuit', sql.NVarChar(50), Cuit)
                 .input('fkRol', sql.Int, fkRol)
                 .input('fkEmpresa', sql.Int, fkEmpresa)
                 .query('INSERT INTO Usuarios (Nombre, Apellido, Contraseña, Mail, CodigoEmpresa, Cuit, fkRol, fkEmpresa) VALUES (@Nombre, @Apellido, @Contraseña, @Mail, @CodigoEmpresa, @Cuit, @fkRol, @fkEmpresa)')
@@ -32,7 +44,7 @@ export default class usuarioServices {
         let returnEntity = null;
         let pool = await sql.connect(config);
         console.log(Usuario);
-        const { id, nombre, apellido, contraseña, mail, codigoEmpresa, fkRol, fkEmpresa, cuit } = Usuario;
+        const { Id, Nombre, Apellido, Contraseña, Mail, CodigoEmpresa, fkRol, fkEmpresa, Cuit } = Usuario;
         try {
             const request = new sql.Request(pool);
 
@@ -55,21 +67,28 @@ export default class usuarioServices {
 
     static getUsuarioById = async (id) => {
         let returnEntity = null;
-        try{
+        try {
             let pool = await sql.connect(config);
             let result = await pool.request()
                 .input('pId', sql.Int, id)
                 .query('SELECT * FROM Usuarios WHERE Id = @pId');
             console.log(result);
             returnEntity = result.recordsets[0][0];
-        }catch (error){
+        } catch (error) {
             console.log(error);
         }
         return returnEntity;
     }
-    static getUsuarioByMailYContra= async (Mail, Contraseña) => {
+
+    static getUsuarioByMailYContra = async (Mail, Contraseña) => {
         let returnEntity = null;
-        try{
+        const mailExistente = await validateEmailExists(Mail);
+
+        if (!mailExistente) { //se fija si existe el mail
+            console.log("Error: El correo electrónico no está registrado.");
+            return returnEntity;
+        }
+        try {
             let pool = await sql.connect(config);
             let result = await pool.request()
                 .input('Mail', sql.VarChar(150), Mail)
@@ -77,22 +96,29 @@ export default class usuarioServices {
                 .query('SELECT * FROM Usuarios WHERE Mail = @Mail AND Contraseña = @Contraseña');
             console.log(result);
             returnEntity = result.recordsets[0][0];
-        }catch (error){
+        } catch (error) {
             console.log(error);
         }
         return returnEntity;
     }
+    static registrarUsuario = async (Mail) => {
+        const correoExistente = await checkExistingUser(Mail);
 
-    static deleteUsuario = async(id) => {
+        if (correoExistente) {
+            console.log("Error: El correo electrónico ya está registrado.");
+            return;
+        }
+    }
+    static deleteUsuario = async (id) => {
         let returnEntity = null;
         let pool = await sql.connect(config);
-        try{
+        try {
             const result = await pool.request()
                 .input('Id', sql.Int, id)
                 .query('DELETE from Usuarios WHERE Id = @Id ');
-                console.log(result);
-                returnEntity = result.rowsAffected;
-        }catch (error) {
+            console.log(result);
+            returnEntity = result.rowsAffected;
+        } catch (error) {
             console.log(error);
         }
         return returnEntity;

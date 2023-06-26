@@ -18,8 +18,8 @@ export default class clienteServices {
 
     static insertCliente = async(cliente) => {
         let returnEntity = null;
-        console.log(character);
-        const {id, nombre, apellido, mail, fkUsuario} = cliente;
+        console.log(cliente);
+        const {Id, Nombre, Apellido, Mail, fkUsuario, Telefono} = cliente;
         let pool = await sql.connect(config);
 
         try{
@@ -30,8 +30,9 @@ export default class clienteServices {
             .input('Nombre', sql.NVarChar(50), Nombre)
             .input('Apellido', sql.NVarChar(50), Apellido)
             .input('Mail', sql.NVarChar(50), Mail)
-            .input('fkUsuario', slq.Int, fkUsuario)
-            .query('INSERT INTO Clientes (Nombre, Apellido, Mail) VALUES (@Nombre, @Apellido, @Mail)')
+            .input('fkUsuario', sql.Int, fkUsuario)
+            .input('Telefono', sql.Int, Telefono)
+            .query('INSERT INTO Clientes (Nombre, Apellido, Mail, Telefono, fkUsuario) VALUES (@Nombre, @Apellido, @Mail, @Telefono, @fkUsuario)')
         }catch (error) {
             console.log(error);
         }
@@ -55,7 +56,7 @@ export default class clienteServices {
     static updateCliente = async (Cliente) => {
         let returnEntity = null;
         let pool = await sql.connect(config);
-        const { id, nombre, apellido, mail, fkUsuario } = Cliente;
+        const { Id, Nombre, Apellido, Mail, fkUsuario, Telefono } = Cliente;
         try {
             const request = new sql.Request(pool);
 
@@ -63,9 +64,10 @@ export default class clienteServices {
                 .input('Nombre', sql.NVarChar(50), Nombre)
                 .input('Apellido', sql.NVarChar(50), Apellido)
                 .input('Mail', sql.NVarChar(50), Mail)
-                .input('fkUsuario', slq.Int, fkUsuario)
-                .input('Id', slq.Int, Id)
-                .query('UPDATE Clientes SET Nombre = @Nombre, Apellido = @Apellido, Mail = @Mail WHERE Id = @Id');
+                .input('fkUsuario', sql.Int, fkUsuario)
+                .input('Id', sql.Int, Id)
+                .input('Telefono', sql.Int, Telefono)
+                .query('UPDATE Clientes SET Nombre = @Nombre, Apellido = @Apellido, Mail = @Mail, Telefono = @Telefono WHERE Id = @Id');
         } catch (error) {
             console.log(error);
         }

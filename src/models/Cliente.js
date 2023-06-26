@@ -3,6 +3,7 @@ class Cliente{
     nombre;
     apellido;
     mail;
+    telefono;
     fkUsuario;
 }
 export default Cliente;

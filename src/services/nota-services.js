@@ -14,7 +14,7 @@ export default class notaServices {
 
             returnEntity = request
                 .input('Notas', sql.NVarChar(9999), Notas)
-                .input('fkReunion', slq.Int, fkReunion)
+                .input('fkReunion', sql.Int, fkReunion)
                 .input('Id', sql.Int, Id)
                 .query('INSERT INTO Notas (Notas) VALUES (@Notas)')
         } catch (error) {
@@ -60,7 +60,7 @@ export default class notaServices {
             returnEntity = request
                 .input('Notas', sql.NVarChar(9999), Notas)
                 .input('Id', sql.Int, Id)
-                .input('fkReunion', slq.Int, fkReunion)
+                .input('fkReunion', sql.Int, fkReunion)
                 .query('UPDATE Notas SET Nota = @Nota WHERE Id = @Id');
         } catch (error) {
             console.log(error);
