@@ -8,9 +8,10 @@ export default class usuarioServices {
         let pool = await sql.connect(config);
         let result = await pool.request()
             .input('Mail', sql.VarChar(150), Mail)
-            .query('SELECT COUNT(*) as count FROM Usuarios WHERE Mail = @Mail');
+            .query('SELECT * FROM Usuarios WHERE Mail = @Mail');
         // Comprueba si el correo electrónico existe
-        if (result.recordset[0].count > 0) {
+        console.log(result);
+        if (result.recordset.length > 0) {
             return true; // El correo electrónico ya existe
         } else {
             return false; // El correo electrónico no existe
@@ -18,8 +19,11 @@ export default class usuarioServices {
     }
     static insertUsuario = async (Usuario) => {
         let returnEntity = null;
-        console.log(Usuario);
+    
         const { Nombre, Apellido, Contraseña, Mail, CodigoEmpresa, fkRol, fkEmpresa, Cuit } = Usuario;
+    
+        if(this.checkExistingUser(Mail)) return null;
+
         let pool = await sql.connect(config);
         try {
             const request = new sql.Request(pool);
