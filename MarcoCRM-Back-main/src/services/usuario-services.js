@@ -12,50 +12,56 @@ export default class usuarioServices {
         // Comprueba si el correo electrónico existe
         console.log(result);
         if (result.recordset.length > 0) {
-            return true; // El correo electrónico ya existe
+            console.log("ya existe")
+            return true;
+            // El correo electrónico ya existe
         } else {
+            console.log("creado :)")
             return false; // El correo electrónico no existe
         }
     }
     static insertUsuario = async (Usuario) => {
         let returnEntity = null;
-    
         const { Nombre, Apellido, Contraseña, Mail, CodigoEmpresa, fkRol, fkEmpresa, Cuit } = Usuario;
-    
-        if(this.checkExistingUser(Mail)) return null;
-
         let pool = await sql.connect(config);
         try {
-            const request = new sql.Request(pool);
+            const exists = await this.checkExistingUser(Mail);
+            if (exists) {
+                return { error: "usuario existente" }
+            }
+            else {
+                const request = new sql.Request(pool);
 
-            returnEntity = request
-                .input('Nombre', sql.NVarChar(150), Nombre)
-                .input('Apellido', sql.NVarChar(150), Apellido)
-                .input('Contraseña', sql.NVarChar(150), Contraseña)
-                .input('Mail', sql.NVarChar(150), Mail)
-                .input('CodigoEmpresa', sql.Int, CodigoEmpresa)
-                .input('Cuit', sql.NVarChar(50), Cuit)
-                .input('fkRol', sql.Int, fkRol)
-                .input('fkEmpresa', sql.Int, fkEmpresa)
-                .query('INSERT INTO Usuarios (Nombre, Apellido, Contraseña, Mail, CodigoEmpresa, Cuit, fkRol, fkEmpresa) VALUES (@Nombre, @Apellido, @Contraseña, @Mail, @CodigoEmpresa, @Cuit, @fkRol, @fkEmpresa)')
+                returnEntity = request
+                    .input('Nombre', sql.NVarChar(150), Nombre)
+                    .input('Apellido', sql.NVarChar(150), Apellido)
+                    .input('Contraseña', sql.NVarChar(150), Contraseña)
+                    .input('Mail', sql.NVarChar(150), Mail)
+                    .input('CodigoEmpresa', sql.Int, CodigoEmpresa)
+                    .input('Cuit', sql.NVarChar(50), Cuit)
+                    .input('fkRol', sql.Int, fkRol)
+                    .input('fkEmpresa', sql.Int, fkEmpresa)
+                    .query('INSERT INTO Usuarios (Nombre, Apellido, Contraseña, Mail, CodigoEmpresa, Cuit, fkRol, fkEmpresa) VALUES (@Nombre, @Apellido, @Contraseña, @Mail, @CodigoEmpresa, @Cuit, @fkRol, @fkEmpresa)')
+            }
         } catch (error) {
             console.log(error);
         }
         return returnEntity;
     }
 
-    /*static getAllVendedores = async() => {
+    static getAllVendedores = async() => {
         let returnEntity = null;
         try{
             let pool = await sql.connect(config);
             let result = await pool.request()
-                .query('SELECT * FROM Usuarios WHERE fkUsuario = @id ');
+                .query('SELECT * FROM Usuarios INNER JOIN Empresa E ON U.fkEmpresa = E.Id WHERE fkRol = 2');
             returnEntity = result.recordsets[0];
         }catch (error){
             console.log(error);
         }
         return returnEntity;
-    }*///preguntar sobre esto
+    }
+    ///preguntar sobre esto
 
     static updateUsuario = async (Usuario) => {
         let returnEntity = null;
@@ -99,8 +105,7 @@ export default class usuarioServices {
 
     static getUsuarioByMailYContra = async (Mail, Contraseña) => {
         let returnEntity = null;
-        const mailExistente = await validateEmailExists(Mail);
-
+        const mailExistente = await this.checkExistingUser(Mail);
         if (!mailExistente) { //se fija si existe el mail
             console.log("Error: El correo electrónico no está registrado.");
             return returnEntity;
@@ -119,9 +124,9 @@ export default class usuarioServices {
         return returnEntity;
     }
     static registrarUsuario = async (Mail) => {
-        const correoExistente = await checkExistingUser(Mail);
+        const mailExistente = await this.checkExistingUser(Mail);
 
-        if (correoExistente) {
+        if (mailExistente) {
             console.log("Error: El correo electrónico ya está registrado.");
             return;
         }

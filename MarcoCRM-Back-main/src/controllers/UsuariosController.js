@@ -4,8 +4,8 @@ const usuarioRouter = Router();
 
 usuarioRouter.post('', async(req, res) => {
     try {
-        await usuarioServices.insertUsuario(req.body.usuario)
-        res.status(201).json({message: 'user inserted'});
+        const result = await usuarioServices.insertUsuario(req.body.usuario)
+        res.status(201).json(result);
     } catch (error) {
         console.error(error);
         res.status(500).json({error: 'insert failed'});
@@ -29,6 +29,12 @@ usuarioRouter.get('/getById/:id', async(req, res) => {
 
 usuarioRouter.get('/login', async(req, res) => {
     const usuario = await usuarioServices.getUsuarioByMailYContra(req.body.usuario.mail, req.body.usuario.pass)
+    return res.status(200).json(usuario);
+});
+
+usuarioRouter.get('/getByEmpresa/:idEmpresa', async(req, res) => {
+    const usuario = await usuarioServices.getAllVendedores(req.params.idEmpresa);
+    console.log(res);
     return res.status(200).json(usuario);
 });
 

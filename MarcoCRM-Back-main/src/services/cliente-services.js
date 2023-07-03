@@ -17,15 +17,36 @@ export default class clienteServices {
         return returnEntity;
     }
 
+    static checkExistingClient = async (Mail) => {
+        let pool = await sql.connect(config);
+        let result = await pool.request()
+            .input('Mail', sql.VarChar(150), Mail)
+            .query('SELECT * FROM Clientes WHERE Mail = @Mail');
+        // Comprueba si el correo electrónico existe
+        console.log(result);
+        if (result.recordset.length > 0) {
+            console.log("ya existe");
+            return true; // El correo electrónico ya existe
+        } else {
+            console.log("false");
+            return false; // El correo electrónico no existe
+        }
+    }
+
     static insertCliente = async(cliente) => {
         let returnEntity = null;
         console.log(cliente);
         const {Id, Nombre, Apellido, Mail, fkUsuario, Telefono} = cliente;
-        console.log("CONFIGGGGG", config);
+        // console.log(config);
         let pool = await sql.connect(config);
 
         try{
-            const request = new sql.Request(pool);
+            const exists = await this.checkExistingClient(Mail);
+            if (exists) {
+                return { error: "cliente existente" }
+            }
+            else {
+                const request = new sql.Request(pool);
 
             returnEntity = request
             .input('Id', sql.Int, Id)
@@ -35,10 +56,11 @@ export default class clienteServices {
             .input('fkUsuario', sql.Int, fkUsuario)
             .input('Telefono', sql.Int, Telefono)
             .query('INSERT INTO Clientes (Nombre, Apellido, Mail, Telefono, fkUsuario) VALUES (@Nombre, @Apellido, @Mail, @Telefono, @fkUsuario)')
+            }
         }catch (error) {
             console.log(error);
         }
-        return returnEntity;
+        return { message: "user inserted" };
     }
 
     static getClienteById = async (id) => {
