@@ -6,6 +6,7 @@ export default class clienteServices {
     static getAllClientes = async() => {
         let returnEntity = null;
         try{
+            console.log("CONFIGGGGG", config);
             let pool = await sql.connect(config);
             let result = await pool.request()
                 .query('SELECT * FROM Clientes WHERE fkUsuario = @id ');
@@ -20,6 +21,7 @@ export default class clienteServices {
         let returnEntity = null;
         console.log(cliente);
         const {Id, Nombre, Apellido, Mail, fkUsuario, Telefono} = cliente;
+        console.log("CONFIGGGGG", config);
         let pool = await sql.connect(config);
 
         try{
