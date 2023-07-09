@@ -5,7 +5,13 @@ const usuarioRouter = Router();
 usuarioRouter.post('', async(req, res) => {
     try {
         const result = await usuarioServices.insertUsuario(req.body.usuario)
-        res.status(201).json(result);
+        if(result == false){
+            res.status(401).json({message: "error, usuario ya existente"});
+        }
+        else{
+            res.status(201).json({message: "usuario registrado correctamente!"});
+        }
+        
     } catch (error) {
         console.error(error);
         res.status(500).json({error: 'insert failed'});
@@ -29,7 +35,14 @@ usuarioRouter.get('/getById/:id', async(req, res) => {
 
 usuarioRouter.get('/login', async(req, res) => {
     const usuario = await usuarioServices.getUsuarioByMailYContra(req.body.usuario.mail, req.body.usuario.pass)
-    return res.status(200).json(usuario);
+    console.log("ENDPOINT", usuario);
+    if(usuario == null){
+        res.status(401).json({message: "Usuario no encontrado"});
+    }
+    else{
+        return res.status(200).json(usuario);
+    }
+    
 });
 
 usuarioRouter.get('/getByEmpresa/:idEmpresa', async(req, res) => {
@@ -47,5 +60,11 @@ usuarioRouter.delete('/:id', async(req, res) => {
     }
     else res.status(500).json({error: 'server error'});
 })
+
+usuarioRouter.get('', async(req, res) => {
+    const usuarios = await usuarioServices.getAllVendedores();
+    console.log(res);
+    return res.status(200).json(usuarios);
+});
 
 export default usuarioRouter;

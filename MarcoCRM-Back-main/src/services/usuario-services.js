@@ -12,7 +12,7 @@ export default class usuarioServices {
         // Comprueba si el correo electrónico existe
         console.log(result);
         if (result.recordset.length > 0) {
-            console.log("ya existe")
+            console.log("logeado")
             return true;
             // El correo electrónico ya existe
         } else {
@@ -26,8 +26,8 @@ export default class usuarioServices {
         let pool = await sql.connect(config);
         try {
             const exists = await this.checkExistingUser(Mail);
-            if (exists) {
-                return { error: "usuario existente" }
+            if (exists == true) {
+                return false;
             }
             else {
                 const request = new sql.Request(pool);
@@ -49,14 +49,14 @@ export default class usuarioServices {
         return returnEntity;
     }
 
-    static getAllVendedores = async() => {
+    static getAllVendedores = async () => {
         let returnEntity = null;
-        try{
+        try {
             let pool = await sql.connect(config);
             let result = await pool.request()
-                .query('SELECT * FROM Usuarios INNER JOIN Empresa E ON U.fkEmpresa = E.Id WHERE fkRol = 2');
+                .query('SELECT * FROM Usuarios U INNER JOIN Empresa E ON U.fkEmpresa = E.Id WHERE fkRol = 2');
             returnEntity = result.recordsets[0];
-        }catch (error){
+        } catch (error) {
             console.log(error);
         }
         return returnEntity;

@@ -6,10 +6,10 @@ export default class clienteServices {
     static getAllClientes = async() => {
         let returnEntity = null;
         try{
-            console.log("CONFIGGGGG", config);
+            console.log(config);
             let pool = await sql.connect(config);
             let result = await pool.request()
-                .query('SELECT * FROM Clientes WHERE fkUsuario = @id ');
+                .query('SELECT * FROM Clientes C INNER JOIN Usuarios U ON C.fkUsuario = U.Id');
             returnEntity = result.recordsets[0];
         }catch (error){
             console.log(error);
