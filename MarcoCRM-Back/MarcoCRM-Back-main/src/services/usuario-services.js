@@ -21,6 +21,7 @@ export default class usuarioServices {
     }
     static insertUsuario = async (Usuario) => {
         let returnEntity = null;
+        console.log("INSERT", Usuario)
         const { Nombre, Apellido, Contraseña, Mail, CodigoEmpresa, fkRol, fkEmpresa, Cuit } = Usuario;
         let pool = await sql.connect(config);
         try {
@@ -116,7 +117,7 @@ export default class usuarioServices {
                 .input('Mail', sql.VarChar(150), Mail)
                 .input('Contraseña', sql.VarChar(150), Contraseña)
                 .query('SELECT * FROM Usuarios WHERE Mail = @Mail AND Contraseña = @Contraseña');
-            console.log(result);
+            console.log("login exitoso", result);
             returnEntity = result.recordsets[0][0];
         } catch (error) {
             console.log(error);

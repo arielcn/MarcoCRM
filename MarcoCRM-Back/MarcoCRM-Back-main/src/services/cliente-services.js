@@ -6,14 +6,14 @@ export default class clienteServices {
     static getAllClientes = async(nombreEmpresa) => {
         let returnEntity = null;
         try{
-            console.log(config);
+            //console.log(config);
             let pool = await sql.connect(config);
             let result = await pool.request()
                 .input("Nombre", sql.NVarChar(150), nombreEmpresa)
                 .query('SELECT C.* FROM Clientes C WHERE fkUsuario IN (SELECT Id FROM Usuarios WHERE fkEmpresa = (SELECT Id FROM Empresa WHERE Nombre = @Nombre))');
             returnEntity = result.recordsets[0];
         }catch (error){
-            console.log(error);
+            console.log("error", error);
         }
         return returnEntity;
     }
@@ -37,7 +37,7 @@ export default class clienteServices {
     static insertCliente = async(cliente) => {
         let returnEntity = null;
         console.log(cliente);
-        const {Id, Nombre, Apellido, Mail, fkUsuario, Telefono} = cliente;
+        const {Nombre, Apellido, Mail, fkUsuario, Telefono} = cliente;
         // console.log(config);
         let pool = await sql.connect(config);
 
@@ -50,7 +50,6 @@ export default class clienteServices {
                 const request = new sql.Request(pool);
 
             returnEntity = request
-            .input('Id', sql.Int, Id)
             .input('Nombre', sql.NVarChar(50), Nombre)
             .input('Apellido', sql.NVarChar(50), Apellido)
             .input('Mail', sql.NVarChar(50), Mail)

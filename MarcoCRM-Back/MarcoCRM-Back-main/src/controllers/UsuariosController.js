@@ -33,10 +33,10 @@ usuarioRouter.get('/getById/:id', async(req, res) => {
     return res.status(200).json(usuario);
 });
 
-usuarioRouter.get('/login', async(req, res) => {
-    const usuario = await usuarioServices.getUsuarioByMailYContra(req.body.usuario.mail, req.body.usuario.pass)
+usuarioRouter.post('/login', async(req, res) => {
+    const usuario = await usuarioServices.getUsuarioByMailYContra(req.body.mail, req.body.pass)
     console.log("ENDPOINT", usuario);
-    if(usuario == null){
+    if(!usuario){
         res.status(401).json({message: "Usuario no encontrado"});
     }
     else{
@@ -45,11 +45,11 @@ usuarioRouter.get('/login', async(req, res) => {
     
 });
 
-usuarioRouter.get('/getByEmpresa/:idEmpresa', async(req, res) => {
+/*usuarioRouter.get('/getByEmpresa/:idEmpresa', async(req, res) => {
     const usuario = await usuarioServices.getAllVendedores(req.params.idEmpresa);
     console.log(res);
     return res.status(200).json(usuario);
-});
+});*/
 
 usuarioRouter.delete('/:id', async(req, res) => {
     const rowsAffected = await usuarioServices.deleteUsuario(req.params.id);
@@ -61,9 +61,9 @@ usuarioRouter.delete('/:id', async(req, res) => {
     else res.status(500).json({error: 'server error'});
 })
 
-usuarioRouter.get('', async(req, res) => {
-    const usuarios = await usuarioServices.getAllVendedores(req.body.nombreEmpresa);
-    console.log(res);
+usuarioRouter.get('/:nombreEmpresa', async(req, res) => {
+    const usuarios = await   usuarioServices.getAllVendedores(req.body.nombreEmpresa);
+    console.log(usuarios);
     return res.status(200).json(usuarios);
 });
 
