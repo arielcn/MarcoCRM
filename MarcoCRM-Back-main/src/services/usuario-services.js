@@ -49,12 +49,13 @@ export default class usuarioServices {
         return returnEntity;
     }
 
-    static getAllVendedores = async () => {
+    static getAllVendedores = async (nombreEmpresa) => {
         let returnEntity = null;
         try {
             let pool = await sql.connect(config);
             let result = await pool.request()
-                .query('SELECT * FROM Usuarios U INNER JOIN Empresa E ON U.fkEmpresa = E.Id WHERE fkRol = 2');
+                .input("Nombre", sql.NVarChar(150), nombreEmpresa)
+                .query('SELECT U.* FROM Usuarios U WHERE fkEmpresa = (SELECT Id FROM Empresa WHERE Nombre = @Nombre)');
             returnEntity = result.recordsets[0];
         } catch (error) {
             console.log(error);

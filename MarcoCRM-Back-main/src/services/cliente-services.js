@@ -3,13 +3,14 @@ import sql from 'mssql';
 
 export default class clienteServices {
     
-    static getAllClientes = async() => {
+    static getAllClientes = async(nombreEmpresa) => {
         let returnEntity = null;
         try{
             console.log(config);
             let pool = await sql.connect(config);
             let result = await pool.request()
-                .query('SELECT * FROM Clientes C INNER JOIN Usuarios U ON C.fkUsuario = U.Id');
+                .input("Nombre", sql.NVarChar(150), nombreEmpresa)
+                .query('SELECT C.* FROM Clientes C WHERE fkUsuario IN (SELECT Id FROM Usuarios WHERE fkEmpresa = (SELECT Id FROM Empresa WHERE Nombre = @Nombre))');
             returnEntity = result.recordsets[0];
         }catch (error){
             console.log(error);

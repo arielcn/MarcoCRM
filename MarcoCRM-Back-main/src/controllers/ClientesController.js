@@ -39,7 +39,7 @@ routerClientes.delete('/:id', async(req, res) => {
 });
 
 routerClientes.get('', async(req, res) => {
-    const clientes = await clienteServices.getAllClientes();
+    const clientes = await clienteServices.getAllClientes(req.body.nombreEmpresa);
     console.log(res);
     return res.status(200).json(clientes);
 });
