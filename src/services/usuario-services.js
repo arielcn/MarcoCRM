@@ -41,7 +41,7 @@ export default class usuarioServices {
                     .input('Cuit', sql.NVarChar(50), Cuit)
                     .input('fkRol', sql.Int, fkRol)
                     .input('fkEmpresa', sql.Int, fkEmpresa)
-                    .query('INSERT INTO Usuarios (Nombre, Apellido, Contraseña, Mail, CodigoEmpresa, Cuit, fkRol, fkEmpresa) VALUES (@Nombre, @Apellido, @Contraseña, @Mail, @CodigoEmpresa, @Cuit, @fkRol, @fkEmpresa)')
+                    .query('INSERT INTO Usuarios (Nombre, Apellido, Contraseña, Mail, CodigoEmpresa, Cuit, fkRol, fkEmpresa) VALUES (@Nombre, @Apellido, @Contraseña, @Mail, @CodigoEmpresa, @Cuit, 1, @fkEmpresa)')
             }
         } catch (error) {
             console.log(error);

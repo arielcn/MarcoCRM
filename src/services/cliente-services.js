@@ -53,9 +53,9 @@ export default class clienteServices {
             .input('Nombre', sql.NVarChar(50), Nombre)
             .input('Apellido', sql.NVarChar(50), Apellido)
             .input('Mail', sql.NVarChar(50), Mail)
-            .input('fkUsuario', sql.Int, fkUsuario)
+            //.input('fkUsuario', sql.Int, fkUsuario)
             .input('Telefono', sql.Int, Telefono)
-            .query('INSERT INTO Clientes (Nombre, Apellido, Mail, Telefono, fkUsuario) VALUES (@Nombre, @Apellido, @Mail, @Telefono, @fkUsuario)')
+            .query('INSERT INTO Clientes (Nombre, Apellido, Mail, Telefono) VALUES (@Nombre, @Apellido, @Mail, @Telefono)')
             }
         }catch (error) {
             console.log(error);
