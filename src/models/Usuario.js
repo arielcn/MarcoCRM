@@ -8,5 +8,6 @@ class Usuario {
     fkRol;
     fkEmpresa;
     cuit;
+    telefono;
 }
 export default Usuario;

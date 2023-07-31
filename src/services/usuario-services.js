@@ -22,7 +22,7 @@ export default class usuarioServices {
     static insertUsuario = async (Usuario) => {
         let returnEntity = null;
         console.log("INSERT", Usuario)
-        const { Nombre, Apellido, Contraseña, Mail, CodigoEmpresa, fkRol, fkEmpresa, Cuit } = Usuario;
+        const { Nombre, Apellido, Contraseña, Mail, CodigoEmpresa, fkRol, fkEmpresa, Cuit, Telefono } = Usuario;
         let pool = await sql.connect(config);
         try {
             const exists = await this.checkExistingUser(Mail);
@@ -41,7 +41,8 @@ export default class usuarioServices {
                     .input('Cuit', sql.NVarChar(50), Cuit)
                     .input('fkRol', sql.Int, fkRol)
                     .input('fkEmpresa', sql.Int, fkEmpresa)
-                    .query('INSERT INTO Usuarios (Nombre, Apellido, Contraseña, Mail, CodigoEmpresa, Cuit, fkRol, fkEmpresa) VALUES (@Nombre, @Apellido, @Contraseña, @Mail, @CodigoEmpresa, @Cuit, 1, @fkEmpresa)')
+                    .input('Telefono', sql.NVarChar(50), Telefono)
+                    .query('INSERT INTO Usuarios (Nombre, Apellido, Contraseña, Mail, CodigoEmpresa, Cuit, fkRol, fkEmpresa, Telefono) VALUES (@Nombre, @Apellido, @Contraseña, @Mail, @CodigoEmpresa, @Cuit, @fkRol, @fkEmpresa, @Telefono)')
             }
         } catch (error) {
             console.log(error);
