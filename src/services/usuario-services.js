@@ -22,7 +22,7 @@ export default class usuarioServices {
     static insertUsuario = async (Usuario) => {
         let returnEntity = null;
         console.log("INSERT", Usuario)
-        const { Nombre, Apellido, Contraseña, Mail, CodigoEmpresa, fkRol, fkEmpresa, Cuit, Telefono } = Usuario;
+        const { Nombre, Apellido, Contraseña, Mail, CodigoEmpresa, fkRol, fkEmpresa, Cuit, Telefono }  = Usuario;
         let pool = await sql.connect(config);
         try {
             const exists = await this.checkExistingUser(Mail);

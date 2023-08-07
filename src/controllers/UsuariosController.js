@@ -62,8 +62,8 @@ usuarioRouter.delete('/:id', async(req, res) => {
 })
 
 usuarioRouter.get('/:nombreEmpresa', async(req, res) => {
-    const usuarios = await   usuarioServices.getAllVendedores(req.body.nombreEmpresa);
-    console.log(usuarios);
+    const usuarios = await   usuarioServices.getAllVendedores(req.params.nombreEmpresa);
+    console.log(req.params.nombreEmpresa);
     return res.status(200).json(usuarios);
 });
 
