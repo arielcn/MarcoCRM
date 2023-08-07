@@ -4,12 +4,20 @@ const usuarioRouter = Router();
 
 usuarioRouter.post('', async(req, res) => {
     try {
-        const result = await usuarioServices.insertUsuario(req.body.usuario)
+        const usuarioData = req.body.usuario;
+        const result = await usuarioServices.insertUsuario(usuarioData)
         if(result == false){
             res.status(401).json({message: "error, usuario ya existente"});
         }
         else{
-            res.status(201).json({message: "usuario registrado correctamente!"});
+            if (usuarioData.fkRol === 2) {
+                const vendedorExists = await usuarioServices.insertVendedor(usuarioData);
+                if (vendedorExists === false) {
+                    res.status(401).json({ message: "Error, vendedor ya existente" });
+                } else {
+                    res.status(201).json({ message: "Vendedor registrado correctamente!" });
+                }
+            }
         }
         
     } catch (error) {

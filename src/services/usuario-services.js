@@ -49,6 +49,34 @@ export default class usuarioServices {
         }
         return returnEntity;
     }
+    static insertVendedor = async (Usuario) => {
+        let returnEntity = null;
+        console.log("INSERT", Usuario)
+        const { Nombre, Apellido, Contraseña, Mail, fkEmpresa, Telefono }  = Usuario;
+        let pool = await sql.connect(config);
+        try {
+            const exists = await this.checkExistingUser(Mail);
+            if (exists == true) {
+                return false;
+            }
+            else {
+                const request = new sql.Request(pool);
+
+                returnEntity = request
+                    .input('Nombre', sql.NVarChar(150), Nombre)
+                    .input('Apellido', sql.NVarChar(150), Apellido)
+                    .input('Contraseña', sql.NVarChar(150), Contraseña)
+                    .input('Mail', sql.NVarChar(150), Mail)
+                    .input('CodigoEmpresa', sql.Int, CodigoEmpresa)
+                    .input('fkEmpresa', sql.Int, fkEmpresa)
+                    .input('Telefono', sql.NVarChar(50), Telefono)
+                    .query('INSERT INTO Usuarios (Nombre, Apellido, Contraseña, Mail, CodigoEmpresa, fkEmpresa, Telefono) VALUES (@Nombre, @Apellido, @Contraseña, @Mail, @CodigoEmpresa, @fkEmpresa, @Telefono) WHERE FkRol = 2')
+            }
+        } catch (error) {
+            console.log(error);
+        }
+        return returnEntity;
+    }
 
     static getAllVendedores = async (nombreEmpresa) => {
         let returnEntity = null;
@@ -63,7 +91,6 @@ export default class usuarioServices {
         }
         return returnEntity;
     }
-    ///preguntar sobre esto
 
     static updateUsuario = async (Usuario) => {
         let returnEntity = null;
