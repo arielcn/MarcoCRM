@@ -4,7 +4,8 @@ const usuarioRouter = Router();
 
 usuarioRouter.post('', async(req, res) => {
     try {
-        const usuarioData = req.body.usuario;
+        console.log(req);
+        const usuarioData = req.body;
         const result = await usuarioServices.insertUsuario(usuarioData)
         if(result == false){
             res.status(401).json({message: "error, usuario ya existente"});
