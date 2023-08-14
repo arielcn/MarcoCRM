@@ -34,12 +34,10 @@ export default class clienteServices {
         }
     }
 
-    static insertCliente = async(usuario, cliente) => {
+    static insertCliente = async(cliente) => {
         let returnEntity = null;
         console.log(cliente);
-        console.log(usuario);
         const {Nombre, Apellido, Mail, fkUsuario, Telefono} = cliente;
-        // console.log(config);
         let pool = await sql.connect(config);
 
         try{
@@ -54,7 +52,7 @@ export default class clienteServices {
             .input('Nombre', sql.NVarChar(50), Nombre)
             .input('Apellido', sql.NVarChar(50), Apellido)
             .input('Mail', sql.NVarChar(50), Mail)
-            //revisar esto .input('fkUsuario', sql.Int, usuario.id)
+            .input('fkUsuario', sql.Int, fkUsuario)
             .input('Telefono', sql.Int, Telefono)
             .query('INSERT INTO Clientes (Nombre, Apellido, Mail, Telefono, fkUsuario) VALUES (@Nombre, @Apellido, @Mail, @Telefono, @fkUsuario)')
             }

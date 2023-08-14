@@ -21,7 +21,6 @@ export default class usuarioServices {
     }
     static insertUsuario = async (Usuario) => {
         let returnEntity = null;
-        console.log("INSERT", Usuario)
         const { Nombre, Apellido, Contraseña, Mail, CodigoEmpresa, fkRol, fkEmpresa, Cuit, Telefono }  = Usuario;
         let pool = await sql.connect(config);
         try {
@@ -31,7 +30,7 @@ export default class usuarioServices {
             }
             else {
                 const request = new sql.Request(pool);
-
+                
                 returnEntity = request
                     .input('Nombre', sql.NVarChar(150), Nombre)
                     .input('Apellido', sql.NVarChar(150), Apellido)
