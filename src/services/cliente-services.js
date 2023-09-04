@@ -6,7 +6,6 @@ export default class clienteServices {
     static getAllClientes = async(nombreEmpresa) => {
         let returnEntity = null;
         try{
-            //console.log(config);
             let pool = await sql.connect(config);
             let result = await pool.request()
                 .input("Nombre", sql.NVarChar(150), nombreEmpresa)

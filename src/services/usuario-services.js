@@ -41,6 +41,7 @@ export default class usuarioServices {
                     .input('fkRol', sql.Int, fkRol)
                     .input('fkEmpresa', sql.Int, fkEmpresa)
                     .input('Telefono', sql.NVarChar(50), Telefono)
+                    .input('NombreEmpresa', sql.NVarChar(50), NombreEmpresa)
                     .query('INSERT INTO Usuarios (Nombre, Apellido, Contraseña, Mail, CodigoEmpresa, Cuit, fkRol, fkEmpresa, Telefono) VALUES (@Nombre, @Apellido, @Contraseña, @Mail, @CodigoEmpresa, @Cuit, @fkRol, @fkEmpresa, @Telefono)')
             }
         } catch (error) {
