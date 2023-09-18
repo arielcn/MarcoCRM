@@ -17,7 +17,7 @@ app.use('/clientes', clienteServices);
 app.use('/notas', notaServices);
 app.use('/reuniones', reunionServices);
 app.use('/usuario', usuarioServices);
-app.use('/agendas', agendaServices);
+app.use('/agenda', agendaServices);
 
 
 app.listen(port, () => {
