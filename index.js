@@ -4,7 +4,7 @@ import clienteServices from './src/controllers/ClientesController.js';
 import notaServices from './src/controllers/NotasController.js';
 import reunionServices from './src/controllers/ReunionesController.js';
 import usuarioServices from './src/controllers/UsuariosController.js';
-
+import agendaServices from './src/controllers/AgendasController.js';
 
 
 const app = express();
@@ -17,6 +17,8 @@ app.use('/clientes', clienteServices);
 app.use('/notas', notaServices);
 app.use('/reuniones', reunionServices);
 app.use('/usuario', usuarioServices);
+app.use('/agendas', agendaServices);
+
 
 app.listen(port, () => {
     console.log(`Escuchando al puerto ${port}`)
