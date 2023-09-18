@@ -50,7 +50,6 @@ export default class clienteServices {
     static insertCliente = async(cliente, fkUsuario) => {
         let returnEntity = null;
         console.log("cliente", cliente); 
-        console.log("fkus", fkUsuario);
         const {Nombre, Apellido, Mail, Telefono} = cliente;
         let pool = await sql.connect(config);
 

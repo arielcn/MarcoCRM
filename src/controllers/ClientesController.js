@@ -30,7 +30,6 @@ routerClientes.put('', async(req, res) => {
 
 routerClientes.get('/cliente/:id', async(req, res) => {
     const clientes = await clienteServices.getClienteById(req.params.id)
-    console.log(res);
     return res.status(200).json(clientes);
 });
 
@@ -45,7 +44,6 @@ routerClientes.delete('/:id', async(req, res) => {
 });
 
 routerClientes.get('/:nombreEmpresa', async(req, res) => {
-    console.log("empresa:", req.params.nombreEmpresa); 
     const clientes = await clienteServices.getAllClientes(req.params.nombreEmpresa);
     return res.status(200).json(clientes);
 });
