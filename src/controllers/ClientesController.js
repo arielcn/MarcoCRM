@@ -4,7 +4,13 @@ const routerClientes = Router();
 
 routerClientes.post('', async(req, res) => {
     try {
-        const result = await clienteServices.insertCliente(req.body.cliente)
+
+        console.log("endpoint", req.body);
+        const idUsuario = await clienteServices.getIdByMail(req.body.cliente.MailUsuario);
+
+        console.log("idusuarioendpoint", idUsuario);
+
+        const result = await clienteServices.insertCliente(req.body.cliente, idUsuario)
         res.status(200).json(result);
     } catch (error) {
         console.error(error);

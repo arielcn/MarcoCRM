@@ -3,6 +3,20 @@ import sql from 'mssql';
 
 export default class clienteServices {
     
+    static getIdByMail = async(mailUsuario) => {
+        try {
+            let pool = await sql.connect(config);
+            let result = await pool.request()
+                .input("mail", sql.NVarChar, mailUsuario)
+                .query("SELECT id FROM usuarios WHERE mail = @mail");
+            console.log("result", result.recordset[0].id);
+            return result.recordset[0].id;
+        } catch (err) {
+            console.log("error", err);
+            return err;
+        }
+    }
+
     static getAllClientes = async(nombreEmpresa) => {
         let returnEntity = null;
         try{
@@ -33,10 +47,11 @@ export default class clienteServices {
         }
     }
 
-    static insertCliente = async(cliente) => {
+    static insertCliente = async(cliente, fkUsuario) => {
         let returnEntity = null;
-        console.log(cliente);
-        const {Nombre, Apellido, Mail, fkUsuario, Telefono} = cliente;
+        console.log("cliente", cliente); 
+        console.log("fkus", fkUsuario);
+        const {Nombre, Apellido, Mail, Telefono} = cliente;
         let pool = await sql.connect(config);
 
         try{
@@ -52,8 +67,8 @@ export default class clienteServices {
             .input('Apellido', sql.NVarChar(50), Apellido)
             .input('Mail', sql.NVarChar(50), Mail)
             .input('fkUsuario', sql.Int, fkUsuario)
-            .input('Telefono', sql.Int, Telefono)
-            .query('INSERT INTO Clientes (Nombre, Apellido, Mail, Telefono, fkUsuario) VALUES (@Nombre, @Apellido, @Mail, @Telefono, @fkUsuario)')
+            .input('Telefono', sql.Int, Telefono)            
+            .query('INSERT INTO Clientes (Nombre, Apellido, Mail, fkUsuario, Telefono) VALUES (@Nombre, @Apellido, @Mail, @fkUsuario, @Telefono)')
             }
         }catch (error) {
             console.log(error);
