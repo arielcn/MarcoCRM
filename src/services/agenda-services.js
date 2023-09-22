@@ -3,10 +3,10 @@ import sql from 'mssql';
 
 export default class agendaServices {
 
-    static insertAgenda = async (Agenda) => {
+    static insertAgenda = async (Agenda, fkUsuario) => {
         let returnEntity = null;
-        console.log(character);
-        const { Id, NombreCliente, ApellidoCliente, Telefono, Descripcion } = Agenda;
+        console.log("agenda:", Agenda);
+        const { NombreCliente, ApellidoCliente, Telefono, Descripcion, Fecha } = Agenda;
         let pool = await sql.connect(config);
 
         try {
@@ -17,19 +17,22 @@ export default class agendaServices {
                 .input('ApellidoCliente', sql.NVarChar(50), ApellidoCliente)
                 .input('Telefono', sql.NVarChar(50), Telefono)
                 .input('Descripcion', sql.NVarChar(999), Descripcion)
-                .query('INSERT INTO Agendas (NombreCliente, NombreCliente, Telefono, Descripcion) VALUES (@NombreCliente, @NombreCliente, @Telefono, @Descripcion)')
+                .input('Fecha', sql.Date, Fecha)
+                .input('fkUsuario', sql.Int, fkUsuario)
+                .query('INSERT INTO Agendas (NombreCliente, ApellidoCliente, Telefono, Descripcion, Fecha, fkUsuario) VALUES (@NombreCliente, @ApellidoCliente, @Telefono, @Descripcion, @Fecha, @fkUsuario)')
         } catch (error) {
-            console.log(error);
+            console.log(error);                      
         }
         return returnEntity;
     }
 
-    static getAllAgendas = async () => {
+    static getAllAgendas = async (fkUsuario) => {
         let returnEntity = null;
         try {
             let pool = await sql.connect(config);
             let result = await pool.request()
-                .query('SELECT * FROM Agendas WHERE fkUsuario = @Id ');
+                .input("fkUsuario", sql.Int, fkUsuario)
+                .query('SELECT * FROM Agendas WHERE fkUsuario = @fkUsuario ');
             returnEntity = result.recordsets[0];
         } catch (error) {
             console.log(error);
@@ -54,16 +57,18 @@ export default class agendaServices {
     static updateAgenda = async (Agenda) => {
         let returnEntity = null;
         let pool = await sql.connect(config);
-        const { Id, NombreCliente, ApellidoCliente, Telefono, Descripcion } = Agenda;
+        const { Id, NombreCliente, ApellidoCliente, Telefono, Descripcion, Fecha } = Agenda;
         try {
             const request = new sql.Request(pool);
 
             returnEntity = request
+                .input('Id', sql.Int, Id)
                 .input('NombreCliente', sql.NVarChar(50), NombreCliente)
                 .input('ApellidoCliente', sql.NVarChar(50), ApellidoCliente)
                 .input('Telefono', sql.NVarChar(50), Telefono)
                 .input('Descripcion', sql.NVarChar(999), Descripcion)
-                .query('UPDATE Agendas SET NombreCliente = @NombreCliente, ApellidoCliente = @ApellidoCliente, Telefono = @Telefono, Descripcion = @Descripcion   WHERE Id = @Id');
+                .input('Fecha', sql.Date, Fecha)
+                .query('UPDATE Agendas SET NombreCliente = @NombreCliente, ApellidoCliente = @ApellidoCliente, Telefono = @Telefono, Descripcion = @Descripcion, Fecha = @Fecha  WHERE Id = @Id');
         } catch (error) {
             console.log(error);
         }
