@@ -4,6 +4,7 @@ const routerAgenda = Router();
 
 routerAgenda.post('', async(req, res) => {
     try {
+        console.log("POSTAGENDA", req.body);
         await agendaServices.insertAgenda(req.body)
         res.status(200).json({message: 'scheduled inserted'});
     } catch (error) {
