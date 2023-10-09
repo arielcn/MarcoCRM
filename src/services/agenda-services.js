@@ -3,10 +3,10 @@ import sql from 'mssql';
 
 export default class agendaServices {
 
-    static insertAgenda = async (Agenda, fkUsuario) => {
+    static insertAgenda = async (Agenda) => {
         let returnEntity = null;
         console.log("agenda:", Agenda);
-        const { NombreCliente, ApellidoCliente, Telefono, Descripcion, Fecha } = Agenda;
+        const { NombreCliente, ApellidoCliente, Telefono, Descripcion, Fecha, fkUsuario } = Agenda;
         let pool = await sql.connect(config);
 
         try {
