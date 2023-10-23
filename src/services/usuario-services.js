@@ -94,7 +94,7 @@ export default class usuarioServices {
         let returnEntity = null;
         let pool = await sql.connect(config);
         console.log(Usuario);
-        const { Id, Nombre, Apellido, Contraseña, Mail, CodigoEmpresa, fkRol, fkEmpresa, Cuit } = Usuario;
+        const { Id, Nombre, Apellido, Contraseña, Mail, fkRol, fkEmpresa, Cuit, CodigoEmpresa } = Usuario;
         try {
             const request = new sql.Request(pool);
 
@@ -104,11 +104,11 @@ export default class usuarioServices {
                 .input('Apellido', sql.NVarChar(150), Apellido)
                 .input('Contraseña', sql.NVarChar(150), Contraseña)
                 .input('Mail', sql.NVarChar(150), Mail)
-                .input('CodigoEmpresa', sql.Int, CodigoEmpresa)
-                .input('Cuit', sql.NVarChar(50), Cuit)
                 .input('fkRol', sql.Int, fkRol)
                 .input('fkEmpresa', sql.Int, fkEmpresa)
-                .query('UPDATE Usuarios SET Nombre = @Nombre, Apellido = @Apellido, Contraseña = @Contraseña, Mail = @Mail, CodigoEmpresa = @CodigoEmpresa, Cuit = @Cuit WHERE Id = @Id');
+                .input('Cuit', sql.NVarChar(50), Cuit)
+                .input('CodigoEmpresa', sql.Int, CodigoEmpresa)
+                .query('UPDATE Usuarios SET Nombre = @Nombre, Apellido = @Apellido, Contraseña = @Contraseña, Mail = @Mail, fkRol = @fkRol, @fkEmpresa = @fkEmpresa, CodigoEmpresa = @CodigoEmpresa, Cuit = @Cuit WHERE Id = @Id');
         } catch (error) {
             console.log(error);
         }
