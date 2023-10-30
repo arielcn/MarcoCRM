@@ -47,10 +47,10 @@ export default class clienteServices {
         }
     }
 
-    static insertCliente = async(cliente, fkUsuario) => {
+    static insertCliente = async(cliente) => {
         let returnEntity = null;
         console.log("cliente", cliente); 
-        const {Nombre, Apellido, Mail, Telefono} = cliente;
+        const {Nombre, Apellido, Mail, fkUsuario, Telefono} = cliente;
         let pool = await sql.connect(config);
 
         try{
@@ -92,7 +92,7 @@ export default class clienteServices {
     static updateCliente = async (Cliente) => {
         let returnEntity = null;
         let pool = await sql.connect(config);
-        const { Id, Nombre, Apellido, Mail, fkUsuario, Telefono } = Cliente;
+        const { Nombre, Apellido, Mail, fkUsuario, Telefono } = Cliente;
         try {
             const request = new sql.Request(pool);
 
@@ -101,7 +101,6 @@ export default class clienteServices {
                 .input('Apellido', sql.NVarChar(50), Apellido)
                 .input('Mail', sql.NVarChar(50), Mail)
                 .input('fkUsuario', sql.Int, fkUsuario)
-                .input('Id', sql.Int, Id)
                 .input('Telefono', sql.Int, Telefono)
                 .query('UPDATE Clientes SET Nombre = @Nombre, Apellido = @Apellido, Mail = @Mail, Telefono = @Telefono WHERE Id = @Id');
         } catch (error) {

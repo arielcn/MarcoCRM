@@ -3,10 +3,10 @@ import sql from 'mssql';
 
 export default class notaServices {
 
-    static insertNota = async (nota) => {
+    static insertNota = async (Nota) => {
         let returnEntity = null;
         console.log(character);
-        const { id, notas, fkReunion } = nota;
+        const { Id, Notas, fkUsuario } = Nota;
         let pool = await sql.connect(config);
 
         try {
@@ -14,8 +14,8 @@ export default class notaServices {
 
             returnEntity = request
                 .input('Notas', sql.NVarChar(9999), Notas)
-                .input('fkReunion', sql.Int, fkReunion)
                 .input('Id', sql.Int, Id)
+                .input('fkUsuario', sql.Int, fkUsuario)
                 .query('INSERT INTO Notas (Notas) VALUES (@Notas)')
         } catch (error) {
             console.log(error);
@@ -53,15 +53,15 @@ export default class notaServices {
     static updateNota = async (Nota) => {
         let returnEntity = null;
         let pool = await sql.connect(config);
-        const { id, notas, fkReunion } = Nota;
+        const { Id, Notas, fkUsuario } = Nota;
         try {
             const request = new sql.Request(pool);
 
             returnEntity = request
                 .input('Notas', sql.NVarChar(9999), Notas)
                 .input('Id', sql.Int, Id)
-                .input('fkReunion', sql.Int, fkReunion)
-                .query('UPDATE Notas SET Nota = @Nota WHERE Id = @Id');
+                .input('fkUsuario', sql.Int, fkUsuario)
+                .query('UPDATE Notas SET Nota = @Nota WHERE fkUsuario = @Id');
         } catch (error) {
             console.log(error);
         }
@@ -75,7 +75,7 @@ export default class notaServices {
             const request = new sql.Request(pool);
             returnEntity = request
                 .input('Id', sql.Int, id)
-                .query('DELETE from Notas WHERE Id = @Id ');
+                .query('DELETE from Notas WHERE fkUsuario = @Id ');
         } catch (error) {
             console.log(error);
         }

@@ -23,8 +23,8 @@ routerAgenda.put('', async(req, res) => {
     }
 });
 
-routerAgenda.get('/:id', async(req, res) => {
-    const Agenda = await agendaServices.getAgendaById(req.params.id)
+routerAgenda.get('/:user_id', async(req, res) => {
+    const Agenda = await agendaServices.getAgendaById(req.params.user_id)
     console.log(res);
     return res.status(200).json(Agenda);
 });

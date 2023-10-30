@@ -45,9 +45,9 @@ export default class agendaServices {
         try {
             let pool = await sql.connect(config);
             let result = await pool.request()
-                .input('Id', sql.Int, Id)
-                .query('SELECT * FROM Agendas WHERE Id = @Id');
-            returnEntity = result.recordsets[0][0];
+                .input('fkUsuario', sql.Int, Id)
+                .query('SELECT * FROM Agendas WHERE fkUsuario = @fkUsuario');
+            returnEntity = result.recordsets[0];
         } catch (error) {
             console.log(error);
         }
