@@ -1,34 +1,37 @@
 import config from '../../dbconfig.js';
 import sql from 'mssql';
 
-export default class notaServices {
+export default class tareaServices {
 
-    static insertNota = async (Nota) => {
+    static insertTarea = async (Tarea) => {
         let returnEntity = null;
         console.log(character);
-        const { Id, Notas, fkUsuario } = Nota;
+        const { Id, Titulo, Nota, Estado, Fecha, fkUsuario } = Tarea;
         let pool = await sql.connect(config);
 
         try {
             const request = new sql.Request(pool);
 
             returnEntity = request
-                .input('Notas', sql.NVarChar(9999), Notas)
                 .input('Id', sql.Int, Id)
+                .input('Titulo', sql.NVarChar(50), Titulo)
+                .input('Nota', sql.NVarChar(9999), Nota)
+                .input('Estado', sql.NVarChar(50), Estado)
+                .input('Fecha', sql.Date, Fecha)
                 .input('fkUsuario', sql.Int, fkUsuario)
-                .query('INSERT INTO Notas (Notas) VALUES (@Notas)')
+                .query('INSERT INTO Tareas VALUES (@Nota, @Estado, @Fecha, @fkUsuario)')
         } catch (error) {
             console.log(error);
         }
         return returnEntity;
     }
 
-    static getAllNotas = async() => {
+    static getAllTareas = async() => {
         let returnEntity = null;
         try{
             let pool = await sql.connect(config);
             let result = await pool.request()
-                .query('SELECT * FROM Notas WHERE fkReunion = @id ');
+                .query('SELECT * FROM Tareas WHERE fkUsuario = @Id ');
             returnEntity = result.recordsets[0];
         }catch (error){
             console.log(error);
@@ -36,13 +39,13 @@ export default class notaServices {
         return returnEntity;
     }
 
-    static getNotaById = async (id) => {
+    static getTareaById = async (id) => {
         let returnEntity = null;
         try {
             let pool = await sql.connect(config);
             let result = await pool.request()
                 .input('pId', sql.Int, id)
-                .query('SELECT * FROM Notas WHERE Id = @pId');
+                .query('SELECT * FROM Tareas WHERE Id = @pId');
             returnEntity = result.recordsets[0][0];
         } catch (error) {
             console.log(error);
@@ -50,32 +53,35 @@ export default class notaServices {
         return returnEntity;
     }
 
-    static updateNota = async (Nota) => {
+    static updateTarea = async (Nota) => {
         let returnEntity = null;
         let pool = await sql.connect(config);
-        const { Id, Notas, fkUsuario } = Nota;
+        const { Id, Tareas, fkUsuario } = Nota;
         try {
             const request = new sql.Request(pool);
 
             returnEntity = request
-                .input('Notas', sql.NVarChar(9999), Notas)
-                .input('Id', sql.Int, Id)
-                .input('fkUsuario', sql.Int, fkUsuario)
-                .query('UPDATE Notas SET Nota = @Nota WHERE fkUsuario = @Id');
+            .input('Id', sql.Int, Id)
+            .input('Titulo', sql.NVarChar(50), Titulo)
+            .input('Nota', sql.NVarChar(9999), Nota)
+            .input('Estado', sql.NVarChar(50), Estado)
+            .input('Fecha', sql.Date, Fecha)
+            .input('fkUsuario', sql.Int, fkUsuario)
+                .query('UPDATE Tareas SET Nota = @Nota, Estado = @Estado, Fecha = @Fecha WHERE fkUsuario = @Id');
         } catch (error) {
             console.log(error);
         }
         return returnEntity;
     }
 
-    static deleteNota = async (id) => {
+    static deleteTarea = async (id) => {
         let returnEntity = null;
         let pool = await sql.connect(config);
         try {
             const request = new sql.Request(pool);
             returnEntity = request
                 .input('Id', sql.Int, id)
-                .query('DELETE from Notas WHERE fkUsuario = @Id ');
+                .query('DELETE from Tareas WHERE fkUsuario = @Id ');
         } catch (error) {
             console.log(error);
         }
