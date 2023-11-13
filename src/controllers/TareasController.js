@@ -14,8 +14,10 @@ routerTareas.post('', async(req, res) => {
 
 routerTareas.put('/:id', async(req, res) => {
     try {
+        console.log("ESTOY EN PUT", req.body);
         await tareaServices.updateTarea(req.body)
-        res.status(200).json({message: 'task updated'});
+        const newTarea = await tareaServices.getTareaById(req.params.id);
+        res.status(200).json(newTarea);
     } catch (error) {
         console.error(error);
         res.status(500).json({error: 'update failed'});

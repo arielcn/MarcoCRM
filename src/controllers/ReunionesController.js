@@ -22,8 +22,8 @@ reunionRouter.put('', async(req, res) => {
     }
 });
 
-reunionRouter.get('/:id', async(req, res) => {
-    const reunion = await reunionServices.getReunionById(req.params.id)
+reunionRouter.get('/:idUsuario/:idReunion', async(req, res) => {
+    const reunion = await reunionServices.getReunionById(req.params.idReunion)
     console.log(res);
     return res.status(200).json(reunion);
 });
@@ -38,8 +38,8 @@ reunionRouter.delete('/:id', async(req, res) => {
     }
 });
 
-reunionRouter.get('', async(req, res) => {
-    const reuniones = await reunionServices.getAllReuniones();
+reunionRouter.get('/:idUsuario', async(req, res) => {
+    const reuniones = await reunionServices.getAllReuniones(req.params.idUsuario);
     console.log(res);
     return res.status(200).json(reuniones);
 });

@@ -5,21 +5,19 @@ export default class tareaServices {
 
     static insertTarea = async (Tarea) => {
         let returnEntity = null;
-        console.log(character);
-        const { Id, Titulo, Nota, Estado, Fecha, fkUsuario } = Tarea;
+        const { Titulo, Nota, Estado, Fecha, fkUsuario } = Tarea;
         let pool = await sql.connect(config);
 
         try {
             const request = new sql.Request(pool);
 
             returnEntity = request
-                .input('Id', sql.Int, Id)
                 .input('Titulo', sql.NVarChar(50), Titulo)
                 .input('Nota', sql.NVarChar(9999), Nota)
                 .input('Estado', sql.NVarChar(50), Estado)
                 .input('Fecha', sql.Date, Fecha)
                 .input('fkUsuario', sql.Int, fkUsuario)
-                .query('INSERT INTO Tareas VALUES (@Nota, @Estado, @Fecha, @fkUsuario)')
+                .query('INSERT INTO Tareas VALUES (@Titulo, @Nota, @Estado, @Fecha, @fkUsuario)')
         } catch (error) {
             console.log(error);
         }
@@ -56,18 +54,17 @@ export default class tareaServices {
 
     static updateTarea = async (Tarea) => {
         let returnEntity = null;
-        let pool = await sql.connect(config);
         const { Id, Titulo, Nota, Estado, Fecha, fkUsuario } = Tarea;
         try {
-            const request = new sql.Request(pool);
-            returnEntity = request
-            .input('Id', sql.Int, Id)
-            .input('Titulo', sql.NVarChar(50), Titulo)
-            .input('Nota', sql.NVarChar(9999), Nota)
-            .input('Estado', sql.NVarChar(50), Estado)
-            .input('Fecha', sql.Date, Fecha)
-            .input('fkUsuario', sql.Int, fkUsuario)
-                .query('UPDATE Tareas SET Nota = @Nota, Estado = @Estado, Fecha = @Fecha WHERE fkUsuario = @Id');
+            let pool = await sql.connect(config);
+            returnEntity = await pool.request()
+                .input('Id', sql.Int, Id)
+                .input('Titulo', sql.NVarChar(50), Titulo)
+                .input('Nota', sql.NVarChar(9999), Nota)
+                .input('Estado', sql.NVarChar(50), Estado)
+                .input('Fecha', sql.Date, Fecha)
+                .input('fkUsuario', sql.Int, fkUsuario)
+                .query('UPDATE Tareas SET Titulo = @Titulo, Nota = @Nota, Estado = @Estado, Fecha = @Fecha WHERE id = @Id');
         } catch (error) {
             console.log(error);
         }

@@ -27,12 +27,13 @@ export default class reunionServices {
         return returnEntity;
     }
 
-    static getAllReuniones = async() => {
+    static getAllReuniones = async(id) => {
         let returnEntity = null;
         try{
             let pool = await sql.connect(config);
             let result = await pool.request()
-                .query('SELECT * FROM Reuniones');
+                .input("Id", id)
+                .query('SELECT * FROM Reuniones WHERE fkUsuario = @Id');
             returnEntity = result.recordsets[0];
         }catch (error){
             console.log(error);
