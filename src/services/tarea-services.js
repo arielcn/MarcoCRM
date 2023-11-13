@@ -26,11 +26,12 @@ export default class tareaServices {
         return returnEntity;
     }
 
-    static getAllTareas = async() => {
+    static getAllTareas = async(Id) => {
         let returnEntity = null;
         try{
             let pool = await sql.connect(config);
             let result = await pool.request()
+                .input('Id', sql.Int, Id)
                 .query('SELECT * FROM Tareas WHERE fkUsuario = @Id ');
             returnEntity = result.recordsets[0];
         }catch (error){
@@ -39,12 +40,12 @@ export default class tareaServices {
         return returnEntity;
     }
 
-    static getTareaById = async (id) => {
+    static getTareaById = async (Id) => {
         let returnEntity = null;
         try {
             let pool = await sql.connect(config);
             let result = await pool.request()
-                .input('pId', sql.Int, id)
+                .input('pId', sql.Int, Id)
                 .query('SELECT * FROM Tareas WHERE Id = @pId');
             returnEntity = result.recordsets[0][0];
         } catch (error) {
@@ -53,13 +54,12 @@ export default class tareaServices {
         return returnEntity;
     }
 
-    static updateTarea = async (Nota) => {
+    static updateTarea = async (Tarea) => {
         let returnEntity = null;
         let pool = await sql.connect(config);
-        const { Id, Tareas, fkUsuario } = Nota;
+        const { Id, Titulo, Nota, Estado, Fecha, fkUsuario } = Tarea;
         try {
             const request = new sql.Request(pool);
-
             returnEntity = request
             .input('Id', sql.Int, Id)
             .input('Titulo', sql.NVarChar(50), Titulo)

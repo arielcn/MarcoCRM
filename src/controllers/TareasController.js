@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import tareaServices from '../services/tarea-services';
+import tareaServices from "../services/tarea-services.js"
 const routerTareas = Router();
 
 routerTareas.post('', async(req, res) => {
@@ -12,7 +12,7 @@ routerTareas.post('', async(req, res) => {
     }
 });
 
-routerTareas.put('', async(req, res) => {
+routerTareas.put('/:id', async(req, res) => {
     try {
         await tareaServices.updateTarea(req.body)
         res.status(200).json({message: 'task updated'});
@@ -22,8 +22,8 @@ routerTareas.put('', async(req, res) => {
     }
 });
 
-routerTareas.get('/:id', async(req, res) => {
-    const tareas = await tareaServices.getTareaById(req.params.id)
+routerTareas.get('/:idUsuario/:idTarea', async(req, res) => {
+    const tareas = await tareaServices.getTareaById(req.params.idUsuario, req.params.idTarea)
     console.log(res);
     return res.status(200).json(tareas);
 });
@@ -38,9 +38,9 @@ routerTareas.delete('/:id', async(req, res) => {
     }
 });
 
-routerTareas.get('', async(req, res) => {
-    const tareas = await tareaServices.getAllTareas();
-    console.log(res);
+routerTareas.get('/:idUsuario', async(req, res) => {
+    const tareas = await tareaServices.getAllTareas(req.params.idUsuario);
+    console.log("estoy en get", req.params.idUsuario);
     return res.status(200).json(tareas);
 });
 
