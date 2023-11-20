@@ -38,6 +38,20 @@ export default class tareaServices {
         return returnEntity;
     }
 
+    static getAllTareasPorEmpresa = async (CodigoEmpresa) => {
+        let returnEntity = null;
+        try {
+            let pool = await sql.connect(config);
+            let result = await pool.request()
+                .input('CodigoEmpresa', sql.Int, CodigoEmpresa)
+                .query('SELECT T.* FROM Tareas T INNER JOIN Usuarios U ON T.fkUsuario = U.Id WHERE U.CodigoEmpresa = @CodigoEmpresa');
+            returnEntity = result.recordsets[0];
+        } catch (error) {
+            console.log(error);
+        }
+        return returnEntity;
+    }
+
     static getTareaById = async (Id) => {
         let returnEntity = null;
         try {
