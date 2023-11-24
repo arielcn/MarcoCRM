@@ -17,7 +17,7 @@ export default class tareaServices {
                 .input('Estado', sql.NVarChar(50), Estado)
                 .input('Fecha', sql.Date, Fecha)
                 .input('fkUsuario', sql.Int, fkUsuario)
-                .query('INSERT INTO Tareas VALUES (@Titulo, @Nota, @Estado, @Fecha, @fkUsuario)')
+                .query('INSERT INTO Tareas (Titulo, Nota, Estado, Fecha, fkUsuario) VALUES (@Titulo, @Nota, @Estado, @Fecha, @fkUsuario)')
         } catch (error) {
             console.log(error);
         }
@@ -44,7 +44,7 @@ export default class tareaServices {
             let pool = await sql.connect(config);
             let result = await pool.request()
                 .input('CodigoEmpresa', sql.Int, CodigoEmpresa)
-                .query('SELECT T.* FROM Tareas T INNER JOIN Usuarios U ON T.fkUsuario = U.Id WHERE U.CodigoEmpresa = @CodigoEmpresa');
+                .query('SELECT T.* FROM Tareas T INNER JOIN Usuarios U ON T.fkUsuario = U.Id WHERE U.fkEmpresa = @fkEmpresa');
             returnEntity = result.recordsets[0];
         } catch (error) {
             console.log(error);

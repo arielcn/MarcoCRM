@@ -40,15 +40,15 @@ routerTareas.delete('/:id', async(req, res) => {
     }
 });
 
-routerTareas.get('/:idUsuario', async(req, res) => {
+routerTareas.get('/usuario/:idUsuario', async(req, res) => {
     const tareas = await tareaServices.getAllTareas(req.params.idUsuario);
     console.log("estoy en get", req.params.idUsuario);
     return res.status(200).json(tareas);
 });
 
-routerTareas.get('/:idUsuario', async(req, res) => {
-    const tareas = await tareaServices.getAllTareasPorEmpresa(req.params.idUsuario);
-    console.log("estoy en get", req.params.idUsuario);
+routerTareas.get('/empresa/:fkEmpresa', async(req, res) => {
+    const tareas = await tareaServices.getAllTareasPorEmpresa(req.params.fkEmpresa);
+    console.log("estoy en get", req.params.fkEmpresa);
     return res.status(200).json(tareas);
 });
 

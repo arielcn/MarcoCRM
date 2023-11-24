@@ -21,37 +21,7 @@ export default class usuarioServices {
     }
     static insertUsuario = async (Usuario) => {
         let returnEntity = null;
-        const { Nombre, Apellido, Contraseña, Mail, NombreEmpresa, CodigoEmpresa, fkRol, fkEmpresa, Cuit }  = Usuario;
-        let pool = await sql.connect(config);
-        try {
-            const exists = await this.checkExistingUser(Mail);
-            if (exists == true) {
-                return false;
-            }
-            else {
-                const request = new sql.Request(pool);
-                
-                returnEntity = request
-                    .input('Nombre', sql.NVarChar(150), Nombre)
-                    .input('Apellido', sql.NVarChar(150), Apellido)
-                    .input('Contraseña', sql.NVarChar(150), Contraseña)
-                    .input('Mail', sql.NVarChar(150), Mail)
-                    .input('NombreEmpresa', sql.NVarChar(50), NombreEmpresa)
-                    .input('CodigoEmpresa', sql.NVarChar(50), CodigoEmpresa)
-                    .input('Cuit', sql.NVarChar(50), Cuit)
-                    .input('fkRol', sql.Int, fkRol)
-                    .input('fkEmpresa', sql.Int, fkEmpresa)
-                    .query('INSERT INTO Usuarios (Nombre, Apellido, Contraseña, Mail, NombreEmpresa, CodigoEmpresa, Cuit, fkRol, fkEmpresa ) VALUES (@Nombre, @Apellido, @Contraseña, @Mail, @NombreEmpresa, @CodigoEmpresa, @Cuit, @fkRol, @fkEmpresa)')
-            }
-        } catch (error) {
-            console.log(error);
-        }
-        return returnEntity;
-    }
-    static insertVendedor = async (Usuario) => {
-        let returnEntity = null;
-        console.log("INSERT", Usuario)
-        const { Nombre, Apellido, Contraseña, Mail, fkEmpresa, Telefono }  = Usuario;
+        const { Nombre, Apellido, Contraseña, Mail, fkRol, CodigoEmpresa, Cuit } = Usuario;
         let pool = await sql.connect(config);
         try {
             const exists = await this.checkExistingUser(Mail);
@@ -66,10 +36,71 @@ export default class usuarioServices {
                     .input('Apellido', sql.NVarChar(150), Apellido)
                     .input('Contraseña', sql.NVarChar(150), Contraseña)
                     .input('Mail', sql.NVarChar(150), Mail)
-                    .input('CodigoEmpresa', sql.Int, CodigoEmpresa)
+                    .input('Cuit', sql.Int, Cuit)
+                    .input('fkRol', sql.Int, fkRol)
+                    .input('fkEmpresa', sql.NVarChar(50), CodigoEmpresa)
+                    .query('INSERT INTO Usuarios (Nombre, Apellido, Contraseña, Mail, Cuit, fkRol, fkEmpresa ) VALUES (@Nombre, @Apellido, @Contraseña, @Mail, @Cuit, @fkRol, @fkEmpresa)')
+            }
+        } catch (error) {
+            console.log(error);
+        }
+        return returnEntity;
+    }
+    static insertEmpresa = async (Empresa) => {
+        let returnEntity = null;
+        const { Id, Cuit, Nombre } = Empresa;
+        let pool = await sql.connect(config);
+        try {
+            const request = new sql.Request(pool);
+            returnEntity = request
+                .input('Id', sql.NVarChar(50), Id)
+                .input('Nombre', sql.NVarChar(150), Nombre)
+                .input('Cuit', sql.Int, Cuit)
+                .query('INSERT INTO Empresa (Id, Nombre, Cuit) VALUES (@Id, @Nombre, @Cuit)')
+
+        } catch (error) {
+            console.log(error);
+        }
+        return returnEntity;
+
+    }
+    static deleteEmpresa = async (Id) => {
+        let returnEntity = null;
+        let pool = await sql.connect(config);
+        try {
+            const request = new sql.Request(pool);
+            returnEntity = request
+                .input("fkEmpresa", sql.NVarChar(50), Id)
+                .query('DELETE FROM Empresa WHERE Id = @fkEmpresa')
+
+        } catch (error) {
+            console.log(error);
+        }
+        return returnEntity;
+
+    }
+
+    static insertVendedor = async (Usuario) => {
+        let returnEntity = null;
+        console.log("INSERT", Usuario)
+        const { Nombre, Apellido, Contraseña, Mail, fkEmpresa, Telefono } = Usuario;
+        let pool = await sql.connect(config);
+        try {
+            const exists = await this.checkExistingUser(Mail);
+            if (exists == true) {
+                return false;
+            }
+            else {
+                const request = new sql.Request(pool);
+
+                returnEntity = request
+                    .input('Nombre', sql.NVarChar(150), Nombre)
+                    .input('Apellido', sql.NVarChar(150), Apellido)
+                    .input('Contraseña', sql.NVarChar(150), Contraseña)
+                    .input('Mail', sql.NVarChar(150), Mail)
                     .input('fkEmpresa', sql.Int, fkEmpresa)
                     .input('Telefono', sql.NVarChar(50), Telefono)
-                    .query('INSERT INTO Usuarios (Nombre, Apellido, Contraseña, Mail, CodigoEmpresa, fkEmpresa, Telefono) VALUES (@Nombre, @Apellido, @Contraseña, @Mail, @CodigoEmpresa, @fkEmpresa, @Telefono) WHERE FkRol = 2')
+                    .query('INSERT INTO Usuarios (Nombre, Apellido, Contraseña, Mail, fkEmpresa, Telefono) VALUES (@Nombre, @Apellido, @Contraseña, @Mail, @fkEmpresa, @Telefono) WHERE FkRol = 2')
             }
         } catch (error) {
             console.log(error);
@@ -156,7 +187,7 @@ export default class usuarioServices {
         const mailExistente = await this.checkExistingUser(Mail);
 
         if (mailExistente) {
-            console.log("Error: El correo electrónico ya está registrado.");
+            console.log("Ha ocurrido un error en el registro.");
             return;
         }
     }
