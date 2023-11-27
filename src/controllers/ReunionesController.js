@@ -30,7 +30,7 @@ reunionRouter.get('/usuario/:idReunion', async(req, res) => {
 
 reunionRouter.delete('/:id', async(req, res) => {
     try {
-        await notasServices.deleteReunion(req.params.id)
+        await reunionServices.deleteReunion(req.params.id)
         res.status(200).json({message: 'meeting deleted'});
     } catch (error) {
         console.error(error);

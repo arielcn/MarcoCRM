@@ -45,7 +45,7 @@ routerAgenda.get('/:idUsuario', async(req, res) => {
 });
 
 routerAgenda.get('/empresa/:fkEmpresa', async(req, res) => {
-    const agendas = await reunionServices.getAllAgendasPorEmpresa(req.params.fkEmpresa);
+    const agendas = await agendaServices.getAllAgendasPorEmpresa(req.params.fkEmpresa);
     console.log("estoy en get", req.params.fkEmpresa);
     return res.status(200).json(agendas);
 });

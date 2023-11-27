@@ -108,13 +108,13 @@ export default class usuarioServices {
         return returnEntity;
     }
 
-    static getAllVendedores = async (nombreEmpresa) => {
+    static getAllVendedores = async (fkEmpresa) => {
         let returnEntity = null;
         try {
             let pool = await sql.connect(config);
             let result = await pool.request()
-                .input("Nombre", sql.NVarChar(150), nombreEmpresa)
-                .query('SELECT U.* FROM Usuarios U WHERE fkEmpresa = (SELECT Id FROM Empresa WHERE Nombre = @Nombre)');
+                .input("fkEmpresa", sql.NVarChar(150), fkEmpresa)
+                .query('SELECT U.* FROM Usuarios U WHERE fkEmpresa = @fkEmpresa)');
             returnEntity = result.recordsets[0];
         } catch (error) {
             console.log(error);
@@ -125,23 +125,21 @@ export default class usuarioServices {
     static updateUsuario = async (Usuario) => {
         let returnEntity = null;
         let pool = await sql.connect(config);
-        console.log(Usuario);
-        const { Id, Nombre, Apellido, Contraseña, Mail, NombreEmpresa, fkRol, fkEmpresa, Cuit, CodigoEmpresa } = Usuario;
+        console.log('estas en update', Usuario);
+        const { Id, Nombre, Apellido, Contraseña, Mail, Cuit } = Usuario;
         try {
             const request = new sql.Request(pool);
-
+            console.log('updateaaa')
             returnEntity = request
                 .input('Id', sql.Int, Id)
                 .input('Nombre', sql.NVarChar(150), Nombre)
                 .input('Apellido', sql.NVarChar(150), Apellido)
                 .input('Contraseña', sql.NVarChar(150), Contraseña)
                 .input('Mail', sql.NVarChar(150), Mail)
-                .input('NombreEmpresa', sql.NVarChar(50), NombreEmpresa)
                 .input('fkRol', sql.Int, fkRol)
                 .input('fkEmpresa', sql.Int, fkEmpresa)
                 .input('Cuit', sql.NVarChar(50), Cuit)
-                .input('CodigoEmpresa', sql.Int, CodigoEmpresa)
-                .query('UPDATE Usuarios SET Nombre = @Nombre, Apellido = @Apellido, Contraseña = @Contraseña, Mail = @Mail, NombreEmpresa = @NombreEmpresa, fkRol = @fkRol, @fkEmpresa = @fkEmpresa, CodigoEmpresa = @CodigoEmpresa, Cuit = @Cuit WHERE Id = @Id');
+                .query('UPDATE Usuarios SET Nombre = @Nombre, Apellido = @Apellido, Contraseña = @Contraseña, Mail = @Mail, Cuit = @Cuit WHERE Id = @Id');
         } catch (error) {
             console.log(error);
         }

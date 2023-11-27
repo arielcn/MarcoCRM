@@ -53,11 +53,11 @@ usuarioRouter.post('/login', async (req, res) => {
 
 });
 
-/*usuarioRouter.get('/getByEmpresa/:idEmpresa', async(req, res) => {
-    const usuario = await usuarioServices.getAllVendedores(req.params.idEmpresa);
+usuarioRouter.get('/getByEmpresa/:fkEmpresa', async(req, res) => {
+    const usuario = await usuarioServices.getAllVendedores(req.params.fkEmpresa);
     console.log(res);
     return res.status(200).json(usuario);
-});*/
+});
 
 usuarioRouter.delete('/:id', async (req, res) => {
     const rowsAffected = await usuarioServices.deleteUsuario(req.params.id);
