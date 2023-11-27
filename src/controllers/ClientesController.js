@@ -6,7 +6,7 @@ routerClientes.post('', async(req, res) => {
     try {
 
         console.log("endpoint", req.body);
-        const idUsuario = await clienteServices.getIdByMail(req.body.cliente.MailUsuario);
+        const idUsuario = await clienteServices.getIdByMail(req.body.cliente.fkUsuario);
 
         console.log("idusuarioendpoint", idUsuario);
 
@@ -43,9 +43,9 @@ routerClientes.delete('/:id', async(req, res) => {
     }
 });
 
-routerClientes.get('/:nombreEmpresa', async(req, res) => {
-    const clientes = await clienteServices.getAllClientes(req.params.nombreEmpresa);
-    console.log("nombre empresa:" , req.params.nombreEmpresa)
+routerClientes.get('/usuario/:idUsuario', async(req, res) => {
+    const clientes = await clienteServices.getAllClientes(req.params.idUsuario);
+    console.log("nombre empresa:" , req.params.idUsuario)
     return res.status(200).json(clientes);
 });
 

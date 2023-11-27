@@ -15,7 +15,7 @@ export default class agendaServices {
             returnEntity = request
                 .input('NombreCliente', sql.NVarChar(50), NombreCliente)
                 .input('ApellidoCliente', sql.NVarChar(50), ApellidoCliente)
-                .input('Telefono', sql.NVarChar(50), Telefono)
+                .input('Telefono', sql.Int, Telefono)
                 .input('Descripcion', sql.NVarChar(999), Descripcion)
                 .input('Fecha', sql.Date, Fecha)
                 .input('fkUsuario', sql.Int, fkUsuario)
@@ -33,6 +33,20 @@ export default class agendaServices {
             let result = await pool.request()
                 .input("fkUsuario", sql.Int, fkUsuario)
                 .query('SELECT * FROM Agendas WHERE fkUsuario = @fkUsuario ');
+            returnEntity = result.recordsets[0];
+        } catch (error) {
+            console.log(error);
+        }
+        return returnEntity;
+    }
+
+    static getAllAgendasPorEmpresa = async (CodigoEmpresa) => {
+        let returnEntity = null;
+        try {
+            let pool = await sql.connect(config);
+            let result = await pool.request()
+                .input('fkEmpresa', sql.NVarChar(50), CodigoEmpresa)
+                .query('SELECT A.* FROM Agendas A WHERE fkUsuario IN (SELECT Id FROM Usuarios WHERE fkEmpresa = @fkEmpresa)');
             returnEntity = result.recordsets[0];
         } catch (error) {
             console.log(error);

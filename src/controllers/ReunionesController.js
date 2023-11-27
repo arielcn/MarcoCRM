@@ -22,7 +22,7 @@ reunionRouter.put('', async(req, res) => {
     }
 });
 
-reunionRouter.get('/:idUsuario/:idReunion', async(req, res) => {
+reunionRouter.get('/usuario/:idReunion', async(req, res) => {
     const reunion = await reunionServices.getReunionById(req.params.idReunion)
     console.log(res);
     return res.status(200).json(reunion);
@@ -41,6 +41,12 @@ reunionRouter.delete('/:id', async(req, res) => {
 reunionRouter.get('/:idUsuario', async(req, res) => {
     const reuniones = await reunionServices.getAllReuniones(req.params.idUsuario);
     console.log(res);
+    return res.status(200).json(reuniones);
+});
+
+reunionRouter.get('/empresa/:fkEmpresa', async(req, res) => {
+    const reuniones = await reunionServices.getAllReunionesPorEmpresa(req.params.fkEmpresa);
+    console.log("estoy en get", req.params.fkEmpresa);
     return res.status(200).json(reuniones);
 });
 

@@ -27,7 +27,7 @@ usuarioRouter.post('', async (req, res) => {
     }
 });
 
-usuarioRouter.put('', async (req, res) => {
+usuarioRouter.put('/:idUsuario', async (req, res) => {
     try {
         await usuarioServices.updateUsuario(req.body)
         res.status(200).json({ message: 'user updated' });

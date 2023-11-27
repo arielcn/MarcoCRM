@@ -30,7 +30,7 @@ export default class tareaServices {
             let pool = await sql.connect(config);
             let result = await pool.request()
                 .input('Id', sql.Int, Id)
-                .query('SELECT * FROM Tareas WHERE fkUsuario = @Id ');
+                .query('SELECT * FROM Tareas WHERE fkUsuario = @Id');
             returnEntity = result.recordsets[0];
         }catch (error){
             console.log(error);
@@ -43,8 +43,8 @@ export default class tareaServices {
         try {
             let pool = await sql.connect(config);
             let result = await pool.request()
-                .input('CodigoEmpresa', sql.Int, CodigoEmpresa)
-                .query('SELECT T.* FROM Tareas T INNER JOIN Usuarios U ON T.fkUsuario = U.Id WHERE U.fkEmpresa = @fkEmpresa');
+                .input('fkEmpresa', sql.NVarChar(50), CodigoEmpresa)
+                .query('SELECT T.* FROM Tareas T WHERE fkUsuario IN (SELECT Id FROM Usuarios WHERE fkEmpresa = @fkEmpresa)');
             returnEntity = result.recordsets[0];
         } catch (error) {
             console.log(error);
@@ -57,8 +57,8 @@ export default class tareaServices {
         try {
             let pool = await sql.connect(config);
             let result = await pool.request()
-                .input('pId', sql.Int, Id)
-                .query('SELECT * FROM Tareas WHERE Id = @pId');
+                .input('Id', sql.Int, Id)
+                .query('SELECT * FROM Tareas WHERE Id = @Id');
             returnEntity = result.recordsets[0][0];
         } catch (error) {
             console.log(error);

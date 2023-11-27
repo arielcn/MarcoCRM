@@ -24,9 +24,9 @@ routerTareas.put('/:id', async(req, res) => {
     }
 });
 
-routerTareas.get('/:idUsuario/:idTarea', async(req, res) => {
-    const tareas = await tareaServices.getTareaById(req.params.idUsuario, req.params.idTarea)
-    console.log(res);
+routerTareas.get('/tareas/:idTarea', async(req, res) => {
+    const tareas = await tareaServices.getTareaById(req.params.idTarea)
+    //console.log(res);
     return res.status(200).json(tareas);
 });
 
@@ -42,7 +42,7 @@ routerTareas.delete('/:id', async(req, res) => {
 
 routerTareas.get('/usuario/:idUsuario', async(req, res) => {
     const tareas = await tareaServices.getAllTareas(req.params.idUsuario);
-    console.log("estoy en get", req.params.idUsuario);
+    //console.log("estoy en get", req.params.idUsuario);
     return res.status(200).json(tareas);
 });
 

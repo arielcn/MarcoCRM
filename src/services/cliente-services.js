@@ -3,27 +3,26 @@ import sql from 'mssql';
 
 export default class clienteServices {
     
-    static getIdByMail = async(mailUsuario) => {
+    static getIdByMail = async(fkUsuario) => {
         try {
             let pool = await sql.connect(config);
             let result = await pool.request()
-                .input("mail", sql.NVarChar, mailUsuario)
-                .query("SELECT id FROM usuarios WHERE mail = @mail");
-            console.log("result", result.recordset[0].id);
-            return result.recordset[0].id;
+                .input("fkUsuario", sql.Int, fkUsuario)
+                .query("SELECT Id FROM Usuarios WHERE fkUsuario = @fkUsuario");
+            return result.recordset[0].Id;
         } catch (err) {
             console.log("error", err);
             return err;
         }
     }
 
-    static getAllClientes = async(nombreEmpresa) => {
+    static getAllClientes = async(Id) => {
         let returnEntity = null;
         try{
             let pool = await sql.connect(config);
             let result = await pool.request()
-                .input("Nombre", sql.NVarChar(150), nombreEmpresa)
-                .query('SELECT C.* FROM Clientes C WHERE fkUsuario IN (SELECT Id FROM Usuarios WHERE fkEmpresa = (SELECT Id FROM Empresa WHERE Nombre = @Nombre))');
+            .input('Id', sql.Int, Id)
+                .query('SELECT * FROM Clientes WHERE fkUsuario = @Id');
             returnEntity = result.recordsets[0];
         }catch (error){
             console.log("error", error);

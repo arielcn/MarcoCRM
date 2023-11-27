@@ -4,7 +4,6 @@ const routerAgenda = Router();
 
 routerAgenda.post('', async(req, res) => {
     try {
-        console.log("POSTAGENDA", req.body);
         await agendaServices.insertAgenda(req.body)
         res.status(200).json({message: 'scheduled inserted'});
     } catch (error) {
@@ -39,10 +38,16 @@ routerAgenda.delete('/:id', async(req, res) => {
     }
 });
 
-routerAgenda.get('', async(req, res) => {
-    const Agenda = await agendaServices.getAllAgendas();
+routerAgenda.get('/:idUsuario', async(req, res) => {
+    const Agenda = await agendaServices.getAllAgendas(req.params.idUsuario);
     console.log(res);
     return res.status(200).json(Agenda);
+});
+
+routerAgenda.get('/empresa/:fkEmpresa', async(req, res) => {
+    const agendas = await reunionServices.getAllAgendasPorEmpresa(req.params.fkEmpresa);
+    console.log("estoy en get", req.params.fkEmpresa);
+    return res.status(200).json(agendas);
 });
 
 export default routerAgenda;
